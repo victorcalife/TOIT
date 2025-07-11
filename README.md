@@ -1,2 +1,2 @@
 # TOIT
-The one in tech - Frontend
+The one in tech
