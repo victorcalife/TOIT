@@ -1,0 +1,63 @@
+{
+  "name": "toit-enterprise",
+  "version": "1.6.0",
+  "description": "TOIT - The One in Tech | Enterprise Technology Ecosystem",
+  "private": true,
+  "workspaces": [
+    "SISTEMAS/*",
+    "PACKAGES/*",
+    "SERVICES/*",
+    "ITMS",
+    "INSTITUCIONAL"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean",
+    
+    "institucional:dev": "turbo run dev --filter=institucional",
+    "itms:dev": "turbo run dev --filter=itms",
+    "portal:dev": "turbo run dev --filter=portal-toit",
+    "oms:dev": "turbo run dev --filter=oms-blueworld",
+    "tradia:dev": "turbo run dev --filter=tradia",
+    "easis:dev": "turbo run dev --filter=easis-erp",
+    
+    "sistemas:dev": "turbo run dev --filter=./SISTEMAS/*",
+    "services:dev": "turbo run dev --filter=./SERVICES/*",
+    
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\""
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^18.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "turbo": "^1.10.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/toit-company/monorepo.git"
+  },
+  "keywords": [
+    "monorepo",
+    "react",
+    "nodejs",
+    "enterprise",
+    "trading",
+    "portal",
+    "easis"
+  ],
+  "author": "TOIT - The One in Tech",
+  "license": "PROPRIETARY",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

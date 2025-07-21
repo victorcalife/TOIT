@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Easis - Gestão Fácil, Negócio Forte</title>
+  <meta name="description" content="Easis: O sistema de gestão mais fácil, completo e integrado para pequenas e médias empresas. Garanta sua licença antecipada!">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --easis-blue: #2563eb;
+      --easis-cyan: #00eaff;
+      --easis-purple: #7c3aed;
+      --easis-dark: #0a1026;
+      --easis-white: #f3f6fa;
+      --easis-green: #10b981;
+      --easis-gradient: linear-gradient(120deg, #00eaff 0%, #2563eb 50%, #7c3aed 100%);
+      --easis-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', 'Montserrat', Arial, sans-serif;
+      background: linear-gradient(135deg, #0a1026 0%, #1e293b 100%);
+      color: var(--easis-white);
+      min-height: 100vh;
+    }
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: radial-gradient(circle at 80% 10%, #00eaff22 0%, transparent 60%),
+                  radial-gradient(circle at 20% 80%, #7c3aed22 0%, transparent 60%);
+      position: relative;
+      z-index: 1;
+    }
+    .logo-easis {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 3.2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      background: var(--easis-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      animation: pulseLogo 2.5s infinite alternate;
+    }
+    @keyframes pulseLogo {
+      0% { text-shadow: 0 0 12px #00eaff55; }
+      100% { text-shadow: 0 0 32px #7c3aed88; }
+    }
+    .slogan {
+      font-size: 1.3rem;
+      color: var(--easis-cyan);
+      font-weight: 600;
+      margin-bottom: 2.2rem;
+      opacity: 0.92;
+    }
+    .cta {
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      color: var(--easis-white);
+      text-shadow: 0 2px 12px #2563eb33;
+    }
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .feature {
+      background: rgba(40, 60, 100, 0.3);
+      border-radius: 16px;
+      box-shadow: var(--easis-shadow);
+      padding: 1.5rem 2rem;
+      min-width: 220px;
+      max-width: 320px;
+      border: 1.5px solid #00eaff33;
+      margin-bottom: 1rem;
+    }
+    .feature-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--easis-cyan);
+      margin-bottom: 0.5rem;
+    }
+    .feature-desc {
+      color: var(--easis-white);
+      font-size: 1rem;
+      opacity: 0.88;
+    }
+    .scarcity {
+      background: linear-gradient(120deg, #230a4e 0%, #1e3a8a 60%);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 0.7rem 1.5rem;
+      border-radius: 12px;
+      margin: 2rem 0 1.5rem 0;
+      display: inline-block;
+      box-shadow: 0 2px 16px #00eaff33;
+      animation: pulseScarcity 1.5s infinite alternate;
+    }
+    @keyframes pulseScarcity {
+      0% { box-shadow: 0 2px 16px #00eaff33; }
+      100% { box-shadow: 0 2px 32px #7c3aed55; }
+    }
+    .lead-form {
+      background: rgba(20, 30, 60, 0.85);
+      border-radius: 18px;
+      box-shadow: var(--easis-shadow);
+      padding: 2.2rem 2rem 2rem 2rem;
+      max-width: 400px;
+      margin: 0 auto 2rem auto;
+      border: 1.5px solid #00eaff33;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+    .lead-form label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #00eaff;
+      margin-bottom: 0.2rem;
+      text-align: left;
+    }
+    .lead-form input {
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      background: #1e293b;
+      color: #f3f6fa;
+      outline: none;
+      box-shadow: 0 2px 8px #00eaff22;
+      margin-bottom: 0.2rem;
+    }
+    .lead-form input:focus {
+      border: 1.5px solid #00eaff;
+      background: #232e47;
+    }
+    .lead-form button {
+      background: var(--easis-gradient);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.8rem 1.6rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #00eaff33;
+      margin-top: 0.5rem;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .lead-form button:hover {
+      background: linear-gradient(120deg, #7c3aed 0%, #00eaff 100%);
+      transform: scale(1.04);
+    }
+    .success-msg {
+      color: var(--easis-green);
+      font-weight: 600;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+    }
+    .footer {
+      text-align: center;
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      margin-top: 2rem;
+      opacity: 0.7;
+    }
+    @media (max-width: 700px) {
+      .features { flex-direction: column; gap: 1rem; }
+      .feature { min-width: 0; max-width: 100%; }
+      .hero { padding: 2rem 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="logo-easis">Easis</div>
+    <div class="slogan">Gestão fácil, negócio forte.</div>
+    <div class="cta">O sistema que vai revolucionar a gestão da sua empresa.<br>ERP, CRM, pagamentos, e-commerce e app. Tudo integrado. Tudo fácil.</div>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-title">Tudo em um só lugar</div>
+        <div class="feature-desc">ERP, CRM, plataforma de pagamentos, e-commerce e app integrados, sem complicação.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Cashback e Fidelização</div>
+        <div class="feature-desc">Aumente vendas e retenção com cashpack e programas de fidelidade nativos.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Pagamentos Instantâneos</div>
+        <div class="feature-desc">Receba e pague sem burocracia, com integração bancária e Pix.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Acesso Simples e Seguro</div>
+        <div class="feature-desc">Login único, permissões por perfil e segurança de ponta a ponta.</div>
+      </div>
+    </div>
+    <div class="scarcity">Para garantir a qualidade, as licenças serão limitadas. Reserve a sua!</div>
+    <a href="https://portal.toit.com.br" class="client-area-link" style="display:inline-block;margin-bottom:2rem;padding:0.7rem 1.5rem;border-radius:12px;background:linear-gradient(120deg,#2563eb 0%,#7c3aed 100%);color:#fff;font-weight:700;font-size:1.05rem;text-decoration:none;box-shadow:0 2px 12px #2563eb33;transition:background 0.2s;">Acessar área do cliente TOIT</a>
+    <form class="lead-form" id="leadForm">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" required>
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" required>
+      <label for="empresa">Empresa</label>
+      <input type="text" id="empresa" name="empresa" required>
+      <button type="submit">Quero minha licença antecipada</button>
+      <div class="success-msg" id="successMsg" style="display:none;">Recebido! Em breve entraremos em contato.</div>
+    </form>
+    <div class="footer">
+      &copy; 2025 Easis. Todos os direitos reservados. | Solução inovadora para pequenas e médias empresas.<br>
+      <span style="font-size:0.95em;opacity:0.8;">Um produto <b>TOIT</b> | <a href="https://www.toit.com.br" style="color:#00eaff;text-decoration:underline;">Conheça a TOIT</a></span>
+    </div>
+  </section>
+  <script>
+    document.getElementById('leadForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      document.getElementById('successMsg').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('successMsg').style.display = 'none';
+        document.getElementById('leadForm').reset();
+      }, 3500);
+    });
+  </script>
+</body>
+</html>

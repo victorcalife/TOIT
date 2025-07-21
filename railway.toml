@@ -1,0 +1,105 @@
+# Railway Configuration - TOIT Enterprise Platform
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+numReplicas = 1
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+# Portal TOIT - SSO Gateway
+[[services]]
+name = "portal-toit"
+source = "SISTEMAS/portal-toit"
+
+[services.build]
+buildCommand = "cd backend && npm run build"
+watchPatterns = ["SISTEMAS/portal-toit/**"]
+
+[services.deploy]
+startCommand = "cd backend && npm start"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+
+[services.env]
+NODE_ENV = "production"
+PORT = "3001"
+
+[[services.domains]]
+name = "portal-toit-dev"
+
+# PostgreSQL Database
+[[services]]
+name = "toit-database"
+source = "postgresql:14"
+
+[services.deploy]
+resources = { memory = 1, cpu = 1 }
+
+# Redis Cache & Sessions
+[[services]]
+name = "toit-redis"
+source = "redis:7-alpine"
+
+[services.deploy]
+resources = { memory = 0.5, cpu = 0.5 }
+
+# OMS Blue World
+[[services]]
+name = "oms-blueworld"
+source = "SISTEMAS/oms-blueworld"
+
+[services.build]
+buildCommand = "npm run build"
+watchPatterns = ["SISTEMAS/oms-blueworld/**"]
+
+[services.deploy]
+startCommand = "npm start"
+healthcheckPath = "/api/health"
+
+[[services.domains]]
+name = "oms-blueworld-dev"
+
+# Tradia System
+[[services]]
+name = "tradia"
+source = "SISTEMAS/tradia"
+
+[services.build]
+buildCommand = "cd backend && npm run build"
+watchPatterns = ["SISTEMAS/tradia/**"]
+
+[services.deploy]
+startCommand = "cd backend && npm start"
+healthcheckPath = "/api/health"
+
+[[services.domains]]
+name = "tradia-dev"
+
+# Environment Variables Template (sobrescrito pelo railway.json)
+[env]
+# Database
+DATABASE_URL = "${DATABASE_URL}"
+POSTGRES_URL = "${DATABASE_URL}"
+
+# Redis
+REDIS_URL = "${REDIS_URL}"
+REDIS_PRIVATE_URL = "${REDIS_PRIVATE_URL}"
+
+# JWT Secrets (definir no Railway Dashboard)
+JWT_SECRET = "${JWT_SECRET}"
+JWT_REFRESH_SECRET = "${JWT_REFRESH_SECRET}"
+
+# Service URLs (auto-generated pelo Railway)
+PORTAL_URL = "https://${RAILWAY_STATIC_URL}"
+OMS_URL = "https://oms-blueworld-dev.up.railway.app"
+TRADIA_URL = "https://tradia-dev.up.railway.app"
+
+# CORS
+CORS_ORIGIN = "${PORTAL_URL},${OMS_URL},${TRADIA_URL}"
+
+# Email (configurar no dashboard)
+SMTP_HOST = "${SMTP_HOST}"
+SMTP_PORT = "${SMTP_PORT}"
+SMTP_USER = "${SMTP_USER}"
+SMTP_PASS = "${SMTP_PASS}"

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-gray-900">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOIT - Portal de Acesso</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(17, 25, 40, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.125);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+        .input-focus:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+    </style>
+</head>
+<body class="h-full gradient-bg">
+    <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8" x-data="loginApp()">
+            <!-- Logo e Título -->
+            <div class="text-center">
+                <img class="mx-auto h-16 w-auto" src="/toit-logo.png" alt="TOIT Logo" 
+                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTYiIGZpbGw9IiM2NjdlZWEiLz4KPHRleHQgeD0iMzIiIHk9IjQwIiBmb250LWZhbWlseT0iSW50ZXIiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5UAAA8L3RleHQ+Cjwvc3ZnPgo='">
+                <h2 class="mt-6 text-3xl font-extrabold text-white">
+                    Portal TOIT
+                </h2>
+                <p class="mt-2 text-sm text-gray-300" x-text="tenantInfo.name || 'The One in Tech'">
+                    The One in Tech
+                </p>
+            </div>
+
+            <!-- Formulário de Login -->
+            <div class="glass-effect rounded-xl px-8 py-10 shadow-2xl">
+                <form class="space-y-6" @submit.prevent="handleLogin">
+                    <!-- Tenant Selector (se não detectado automaticamente) -->
+                    <div x-show="!tenantInfo.slug" x-transition>
+                        <label for="tenant" class="block text-sm font-medium text-gray-300 mb-2">
+                            <i class="fas fa-building mr-2"></i>Empresa
+                        </label>
+                        <select 
+                            id="tenant" 
+                            x-model="form.tenant_slug"
+                            class="input-focus block w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                            required>
+                            <option value="">Selecione a empresa</option>
+                            <option value="blueworld">Blue World</option>
+                            <option value="empresa-abc">Empresa ABC</option>
+                        </select>
+                    </div>
+
+                    <!-- Login Type Selector -->
+                    <div class="flex space-x-4 mb-4">
+                        <button 
+                            type="button"
+                            @click="loginType = 'cpf'"
+                            :class="loginType === 'cpf' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'"
+                            class="flex-1 py-2 px-4 rounded-lg text-sm font-medium transition duration-200">
+                            <i class="fas fa-id-card mr-2"></i>CPF
+                        </button>
+                        <button 
+                            type="button"
+                            @click="loginType = 'email'"
+                            :class="loginType === 'email' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'"
+                            class="flex-1 py-2 px-4 rounded-lg text-sm font-medium transition duration-200">
+                            <i class="fas fa-envelope mr-2"></i>Email
+                        </button>
+                    </div>
+
+                    <!-- CPF Input -->
+                    <div x-show="loginType === 'cpf'" x-transition>
+                        <label for="cpf" class="block text-sm font-medium text-gray-300 mb-2">
+                            <i class="fas fa-id-card mr-2"></i>CPF
+                        </label>
+                        <input 
+                            id="cpf" 
+                            name="cpf" 
+                            type="text" 
+                            x-model="form.cpf"
+                            x-mask="999.999.999-99"
+                            placeholder="000.000.000-00"
+                            class="input-focus block w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
+                    </div>
+
+                    <!-- Email Input -->
+                    <div x-show="loginType === 'email'" x-transition>
+                        <label for="email" class="block text-sm font-medium text-gray-300 mb-2">
+                            <i class="fas fa-envelope mr-2"></i>Email
+                        </label>
+                        <input 
+                            id="email" 
+                            name="email" 
+                            type="email" 
+                            x-model="form.email"
+                            placeholder="seu@email.com"
+                            class="input-focus block w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
+                    </div>
+
+                    <!-- Password Input -->
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
+                            <i class="fas fa-lock mr-2"></i>Senha
+                        </label>
+                        <div class="relative">
+                            <input 
+                                id="password" 
+                                name="password" 
+                                :type="showPassword ? 'text' : 'password'"
+                                x-model="form.password"
+                                placeholder="••••••••"
+                                class="input-focus block w-full px-4 py-3 pr-12 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                                required>
+                            <button 
+                                type="button"
+                                @click="showPassword = !showPassword"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-200">
+                                <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div x-show="error" x-transition class="bg-red-900/50 border border-red-600 rounded-lg px-4 py-3 text-red-200 text-sm">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        <span x-text="error"></span>
+                    </div>
+
+                    <!-- Success Message -->
+                    <div x-show="success" x-transition class="bg-green-900/50 border border-green-600 rounded-lg px-4 py-3 text-green-200 text-sm">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        <span x-text="success"></span>
+                    </div>
+
+                    <!-- Login Button -->
+                    <div>
+                        <button 
+                            type="submit" 
+                            :disabled="loading"
+                            :class="loading ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'"
+                            class="btn-primary group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <span x-show="!loading" class="flex items-center">
+                                <i class="fas fa-sign-in-alt mr-2"></i>
+                                Entrar
+                            </span>
+                            <span x-show="loading" class="flex items-center">
+                                <i class="fas fa-spinner fa-spin mr-2"></i>
+                                Entrando...
+                            </span>
+                        </button>
+                    </div>
+
+                    <!-- Available Systems Preview -->
+                    <div x-show="systems.length > 0" x-transition class="mt-6 pt-6 border-t border-gray-600">
+                        <p class="text-sm text-gray-300 mb-3">Sistemas disponíveis:</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <template x-for="system in systems" :key="system.code">
+                                <div class="bg-gray-800 rounded-lg px-3 py-2 text-xs text-gray-300 flex items-center">
+                                    <i :class="getSystemIcon(system.code)" class="mr-2"></i>
+                                    <span x-text="system.name"></span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Links Auxiliares -->
+                <div class="mt-6 text-center space-y-2">
+                    <p class="text-xs text-gray-400">
+                        Problemas para acessar? 
+                        <a href="mailto:suporte@toit.com" class="text-blue-400 hover:text-blue-300">
+                            Fale com o suporte
+                        </a>
+                    </p>
+                    <p class="text-xs text-gray-500">
+                        © 2025 TOIT - The One in Tech
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alpine.js App Logic -->
+    <script>
+        function loginApp() {
+            return {
+                // Form State
+                loginType: 'cpf',
+                showPassword: false,
+                loading: false,
+                error: '',
+                success: '',
+                
+                // Form Data
+                form: {
+                    cpf: '',
+                    email: '',
+                    password: '',
+                    tenant_slug: ''
+                },
+                
+                // App State
+                tenantInfo: {},
+                systems: [],
+                
+                // Initialize
+                init() {
+                    this.detectTenant();
+                    this.loadAvailableSystems();
+                },
+                
+                // Detect tenant from URL
+                detectTenant() {
+                    const hostname = window.location.hostname;
+                    const subdomain = hostname.split('.')[0];
+                    
+                    // Tenant detection logic
+                    if (subdomain === 'blueworld' || hostname.includes('blueworld')) {
+                        this.tenantInfo = {
+                            slug: 'blueworld',
+                            name: 'Blue World Ltda',
+                            logo: '/blueworld-logo.png'
+                        };
+                        this.form.tenant_slug = 'blueworld';
+                    }
+                    // Add more tenants as needed
+                },
+                
+                // Load available systems
+                async loadAvailableSystems() {
+                    try {
+                        // Mock data - replace with real API call
+                        this.systems = [
+                            { code: 'oms', name: 'OMS', icon: 'fas fa-cogs' },
+                            { code: 'portal', name: 'Portal', icon: 'fas fa-tachometer-alt' },
+                            { code: 'tradia', name: 'Trad.ia', icon: 'fas fa-chart-line' },
+                            { code: 'easis', name: 'Easis ERP', icon: 'fas fa-building' }
+                        ];
+                    } catch (error) {
+                        console.error('Error loading systems:', error);
+                    }
+                },
+                
+                // Handle login form submission
+                async handleLogin() {
+                    this.loading = true;
+                    this.error = '';
+                    this.success = '';
+                    
+                    try {
+                        // Prepare login data
+                        const loginData = {
+                            password: this.form.password,
+                            tenant_slug: this.form.tenant_slug || this.tenantInfo.slug || 'blueworld'
+                        };
+                        
+                        // Add CPF or email based on login type
+                        if (this.loginType === 'cpf' && this.form.cpf) {
+                            loginData.cpf = this.form.cpf.replace(/[^0-9]/g, ''); // Remove formatting
+                        } else if (this.loginType === 'email' && this.form.email) {
+                            loginData.email = this.form.email;
+                        } else {
+                            throw new Error('Por favor, preencha o ' + (this.loginType === 'cpf' ? 'CPF' : 'email'));
+                        }
+                        
+                        // Make login API call
+                        const response = await fetch('/api/auth/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Tenant-Slug': loginData.tenant_slug
+                            },
+                            body: JSON.stringify(loginData)
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (!response.ok) {
+                            throw new Error(result.message || 'Erro ao fazer login');
+                        }
+                        
+                        // Success!
+                        this.success = 'Login realizado com sucesso! Redirecionando...';
+                        
+                        // Store token and redirect
+                        localStorage.setItem('toit_user', JSON.stringify(result.data.user));
+                        
+                        // Redirect after short delay
+                        setTimeout(() => {
+                            const returnUrl = new URLSearchParams(window.location.search).get('returnUrl');
+                            window.location.href = returnUrl || result.data.redirectUrl || '/portal';
+                        }, 1500);
+                        
+                    } catch (error) {
+                        console.error('Login error:', error);
+                        this.error = error.message || 'Erro interno. Tente novamente.';
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                
+                // Get system icon
+                getSystemIcon(systemCode) {
+                    const icons = {
+                        oms: 'fas fa-cogs',
+                        portal: 'fas fa-tachometer-alt',
+                        tradia: 'fas fa-chart-line',
+                        easis: 'fas fa-building'
+                    };
+                    return icons[systemCode] || 'fas fa-cube';
+                }
+            };
+        }
+    </script>
+
+    <!-- Input Masking for CPF -->
+    <script>
+        // Simple CPF mask
+        document.addEventListener('alpine:init', () => {
+            Alpine.directive('mask', (el, { expression }, { effect, evaluateLater }) => {
+                let mask = expression;
+                
+                if (mask === '999.999.999-99') {
+                    el.addEventListener('input', (e) => {
+                        let value = e.target.value.replace(/\D/g, '');
+                        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                        e.target.value = value;
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

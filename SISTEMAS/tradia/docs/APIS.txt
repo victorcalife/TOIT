@@ -1,0 +1,66 @@
+https://docs.cedrotech.com/reference/market-data-introduction
+
+
+https://www.marketdatacloud.com.br/teste-gratis/
+
+documentação:
+
+Introdução
+Entenda mais sobre este recurso
+A API Market Data fornece informações sobre os ativos do mercado financeiro, que são disponibilizadas através de diversas funcionalidades, dentre elas:
+
+Cotações de ativos de diferentes mercados/segmentos (ações, opções, derivativos, criptomoedas etc.);
+Livro de ofertas;
+Gráficos de ativos;
+Notícias;
+Negócios realizados;
+Volume por preço;
+Ranking de corretoras.
+Para que uma requisição seja feita, é necessário que o usuário se autentique previamente à plataforma, criando assim uma sessão que permitirá a comunicação e o consumo das informações. Para maiores informações sobre como se autenticar, acesse os menus a seguir:
+
+Como obter suas credenciais de acesso
+
+Autenticação
+
+Fluxo transacional
+
+Informações importantes
+Após solicitar as credenciais de acesso, você receberá os dados de usuário e senha. Caso você ainda não tenha solicitado suas fscredenciais, entre em contato com o nosso time de especialistas pelo e-mail comercial@cedrotech.com ou ligue para o telefone (34) 3239-0000.
+
+Evento de autenticação
+A autenticação é efetuada por meio do serviço /SignIn, o qual opera como um evento que retorna uma string indicando o resultado da autenticação (true ou false). Quando o retorno for true, significa que a autenticação foi bem-sucedida. Além disso, a resposta incluirá um Cookie de sessão (JSESSIONID), que deve ser obrigatoriamente anexado no header de todas as requisições subsequentes. Esse cookie é essencial para a manutenção da sessão do usuário e para permitir o consumo dos demais serviços de forma autenticada.
+
+
+js example: https://webfeeder.cedrotech.com/SignIn
+
+const options = {
+  method: 'POST',
+  headers: {accept: 'text/plain', 'Content-Type': 'application/x-www-form-urlencoded'},
+  body: new URLSearchParams({account: 'teste', login: 'rafavieira', password: '102030'})
+};
+
+fetch('https://webfeeder.cedrotech.com/SignIn', options)
+  .then(res => res.json())
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
+
+
+example node:
+
+const encodedParams = new URLSearchParams();
+encodedParams.set('account', 'teste');
+encodedParams.set('login', 'rafavieira');
+encodedParams.set('password', '102030');
+
+const url = 'https://webfeeder.cedrotech.com/SignIn';
+const options = {
+  method: 'POST',
+  headers: {accept: 'text/plain', 'Content-Type': 'application/x-www-form-urlencoded'},
+  body: encodedParams
+};
+
+fetch(url, options)
+  .then(res => res.json())
+  .then(json => console.log(json))
+  .catch(err => console.error(err));
+
