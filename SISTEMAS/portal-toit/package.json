@@ -11,10 +11,6 @@
     "clean": "cd backend && npm run clean"
   },
   "dependencies": {
-    "@toit/ui-components": "*",
-    "@toit/design-system": "*",
-    "@toit/auth-lib": "*",
-    "@toit/utils": "*"
   },
   "devDependencies": {
     "concurrently": "^8.2.0"
