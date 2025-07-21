@@ -4,11 +4,7 @@
   "description": "TOIT - The One in Tech | Enterprise Technology Ecosystem",
   "private": true,
   "workspaces": [
-    "SISTEMAS/*",
-    "PACKAGES/*",
-    "SERVICES/*",
-    "ITMS",
-    "INSTITUCIONAL"
+    "SISTEMAS/portal-toit"
   ],
   "scripts": {
     "dev": "turbo run dev",
