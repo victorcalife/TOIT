@@ -12,7 +12,9 @@
       "Bash(touch:*)",
       "Bash(code --version)",
       "Bash(chmod:*)",
-      "Bash(bash scripts/connect-existing-railway.sh:*)"
+      "Bash(bash scripts/connect-existing-railway.sh:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

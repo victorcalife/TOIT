@@ -1,0 +1,24 @@
+# Nixpacks configuration for TOIT monorepo
+[build]
+buildCommand = "cd SISTEMAS/portal-toit/backend && npm ci && npm run build"
+
+[start] 
+cmd = "cd SISTEMAS/portal-toit/backend && npm start"
+
+[variables]
+NODE_ENV = "production"
+
+[phases.setup]
+nixPkgs = ["nodejs-18_x", "npm-8_x"]
+
+[phases.install]
+cmds = [
+  "cd SISTEMAS/portal-toit/backend",
+  "npm ci --only=production"
+]
+
+[phases.build]
+cmds = [
+  "cd SISTEMAS/portal-toit/backend", 
+  "npm run build"
+]

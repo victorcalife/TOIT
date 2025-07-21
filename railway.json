@@ -2,14 +2,15 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "npm run build"
+    "buildCommand": "cd SISTEMAS/portal-toit/backend && npm ci && npm run build"
   },
   "deploy": {
     "numReplicas": 1,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10,
     "healthcheckPath": "/health",
-    "healthcheckTimeout": 300
+    "healthcheckTimeout": 300,
+    "startCommand": "cd SISTEMAS/portal-toit/backend && npm start"
   },
   "environments": {
     "development": {
@@ -17,30 +18,24 @@
         "NODE_ENV": "development",
         "PORT": "3001",
         "FRONTEND_URL": "https://${{RAILWAY_STATIC_URL}}",
-        "CORS_ORIGIN": "https://${{RAILWAY_STATIC_URL}},https://oms-blueworld-dev.up.railway.app,https://tradia-dev.up.railway.app",
         "JWT_SECRET": "${{JWT_SECRET}}",
         "JWT_REFRESH_SECRET": "${{JWT_REFRESH_SECRET}}",
         "DATABASE_URL": "${{DATABASE_URL}}",
         "REDIS_URL": "${{REDIS_URL}}",
-        "SMTP_HOST": "${{SMTP_HOST}}",
-        "SMTP_PORT": "${{SMTP_PORT}}",
-        "SMTP_USER": "${{SMTP_USER}}",
-        "SMTP_PASS": "${{SMTP_PASS}}",
         "DEFAULT_TENANT": "blueworld",
         "ENABLE_LOGGING": "true",
         "LOG_LEVEL": "debug"
       }
     },
-    "staging": {
+    "test": {
       "variables": {
-        "NODE_ENV": "staging",
+        "NODE_ENV": "test",
         "PORT": "3001",
-        "FRONTEND_URL": "https://portal-toit-staging.up.railway.app",
-        "CORS_ORIGIN": "https://portal-toit-staging.up.railway.app,https://oms-blueworld-staging.up.railway.app",
-        "JWT_SECRET": "${{JWT_SECRET_STAGING}}",
-        "JWT_REFRESH_SECRET": "${{JWT_REFRESH_SECRET_STAGING}}",
-        "DATABASE_URL": "${{DATABASE_URL_STAGING}}",
-        "REDIS_URL": "${{REDIS_URL_STAGING}}",
+        "FRONTEND_URL": "https://${{RAILWAY_STATIC_URL}}",
+        "JWT_SECRET": "${{JWT_SECRET}}",
+        "JWT_REFRESH_SECRET": "${{JWT_REFRESH_SECRET}}",
+        "DATABASE_URL": "${{DATABASE_URL}}",
+        "REDIS_URL": "${{REDIS_URL}}",
         "DEFAULT_TENANT": "blueworld",
         "ENABLE_LOGGING": "true",
         "LOG_LEVEL": "info"
@@ -51,11 +46,10 @@
         "NODE_ENV": "production",
         "PORT": "3001",
         "FRONTEND_URL": "https://portal.toit.com",
-        "CORS_ORIGIN": "https://portal.toit.com,https://blueworld.toit.com,https://oms.blueworld.com",
-        "JWT_SECRET": "${{JWT_SECRET_PROD}}",
-        "JWT_REFRESH_SECRET": "${{JWT_REFRESH_SECRET_PROD}}",
-        "DATABASE_URL": "${{DATABASE_URL_PROD}}",
-        "REDIS_URL": "${{REDIS_URL_PROD}}",
+        "JWT_SECRET": "${{JWT_SECRET}}",
+        "JWT_REFRESH_SECRET": "${{JWT_REFRESH_SECRET}}",
+        "DATABASE_URL": "${{DATABASE_URL}}",
+        "REDIS_URL": "${{REDIS_URL}}",
         "DEFAULT_TENANT": "blueworld",
         "ENABLE_LOGGING": "false",
         "LOG_LEVEL": "error",
@@ -63,40 +57,5 @@
         "SECURE_COOKIES": "true"
       }
     }
-  },
-  "services": [
-    {
-      "name": "portal-toit",
-      "source": "./SISTEMAS/portal-toit",
-      "build": {
-        "buildCommand": "cd backend && npm ci && npm run build"
-      },
-      "deploy": {
-        "startCommand": "cd backend && npm start",
-        "healthcheckPath": "/health"
-      }
-    },
-    {
-      "name": "oms-blueworld", 
-      "source": "./SISTEMAS/oms-blueworld",
-      "build": {
-        "buildCommand": "npm ci && npm run build"
-      },
-      "deploy": {
-        "startCommand": "npm start",
-        "healthcheckPath": "/api/health"
-      }
-    },
-    {
-      "name": "tradia",
-      "source": "./SISTEMAS/tradia",
-      "build": {
-        "buildCommand": "cd backend && npm ci && npm run build"
-      },
-      "deploy": {
-        "startCommand": "cd backend && npm start", 
-        "healthcheckPath": "/api/health"
-      }
-    }
-  ]
+  }
 }
