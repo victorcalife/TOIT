@@ -19,13 +19,7 @@
     "start": "npm run dev",
     "migrate:prisma-to-native": "node scripts/migrate-to-native-sql.js"
   },
-  "dependencies": {
-    "@toit/ui-components": "*",
-    "@toit/design-system": "*",
-    "@toit/auth-lib": "*",
-    "@toit/utils": "*",
-    "@toit/shared-database": "*"
-  },
+  "dependencies": {},
   "devDependencies": {
     "concurrently": "^8.2.0"
   },

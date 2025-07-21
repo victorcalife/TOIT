@@ -20,12 +20,7 @@
     "lint:backend": "cd backend && npm run lint",
     "lint:ai-engine": "cd ai-engine && npm run lint"
   },
-  "dependencies": {
-    "@toit/ui-components": "*",
-    "@toit/design-system": "*", 
-    "@toit/auth-lib": "*",
-    "@toit/utils": "*"
-  },
+  "dependencies": {},
   "devDependencies": {
     "concurrently": "^8.2.0"
   }
