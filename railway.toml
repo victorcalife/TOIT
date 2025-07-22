@@ -3,10 +3,10 @@
 
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm install && npm run build --filter=portal-toit"
+buildCommand = "npm install && npm run build"
 
 [deploy]
-startCommand = "npm run portal:dev"
+startCommand = "npm start"
 
 # Environment Variables Template (sobrescrito pelo railway.json)
 [env]
