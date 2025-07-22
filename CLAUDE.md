@@ -1,5 +1,93 @@
 # 🧠 CLAUDE MEMORY - TOIT ENTERPRISE PLATFORM
 
+# CLAUDE-Standard.md
+
+**Template Base para Novos Projetos**  
+**Documentação Técnica, Processual e Histórica Consolidada**
+
+---
+**INTEREAÇÕES SEMPRE NO IDIOMA PORTUGUÊS**
+**CASO EXISTA CI-CD É OBRIGATÓRIO GARANTIR E SEGUIR WORKFLOW A RISCA**
+**AO COMANDO PUSH, REALIZE PUSH COMPLETO (GITHUB) CONFORME NECESSIDADE DAS ALTERAÇÕES REALIZADAS**
+**É PROIBIDO ALTERAR NOMENCLATURAS INCLUISIVE MUDAR LETRAS MINÚSCULAS PARA MAIÚSCULAS OU MAIÚSCULAS PARA MINÚSCULAS**
+**NUNCA ALTERE NADA QUE NÃO FOI SOLICITADO!!! CASO TENHA ALGUMA ALTERAÇÃO DE MELHORIA, SUGERIR E AGUARDAR DECISÃO**
+
+## ⚠️ PROTOCOLO OBRIGATÓRIO - SEMPRE LEIA PRIMEIRO - OBRIGATÓRIO SIGNIFICA 100% DAS VEZES - REGRAS INCREBÁVEIS E OBRIGATÓRIAS
+
+**ANTES DE QUALQUER AÇÃO:**
+1. **IDIOMA**: SEMPRE responder e comunicar em português brasileiro (pt-BR)
+2. **SEMPRE** criar e manter lista de acompanhamento de tarefas (TodoWrite)
+3. **JAMAIS** implemente funcionalidades já existentes (consultar seção STATUS FUNCIONALIDADES)
+4. **SEMPRE** preservar funcionalidades operacionais
+5. **RESPEITAR** hierarquia de permissões do sistema
+6. **SEGUIR** padrões de nomenclatura estabelecidos
+7. **MANTER** este arquivo sempre atualizado com mudanças
+8. **SEMPRE** atualizar este arquivo com regras de negócio, fluxos e processos operacionais
+9. **SEMPRE** considerar, manter e atualizar todas as funcionalidades e seus relacionamentos mantendo clareza no entendimento sobre o projeto de forma global, garantindo análise, revisão e tomada de decisões baseadas no contexto global de processos e objetivos do projeto
+10. **SEMPRE** que tiver dúvidas ou mais de um caminho a seguir no fluxo, tomar a decisão em conjunto comigo para definirmos cada caminho a seguir
+11. **NUNCA** ALTERAR NOMENCLATURAS INCLUISIVE MUDAR LETRAS MINÚSCULAS PARA MAIÚSCULAS OU MAIÚSCULAS PARA MINÚSCULAS
+12. **NUNCA** ALTERE NADA QUE NÃO FOI SOLICITADO!!! CASO TENHA ALGUMA ALTERAÇÃO DE MELHORIA, SUGERIR E AGUARDAR DECISÃO
+13. **SEMPRE** Implemente uma solução do início ao final (processo end-to-end), garantindo funcionamento entre todos os arquivos necessários durante o desenvolvimento. 
+14. **SEMPRE** Popular este arquivo ao final da codificação com a cadeia de relacionamento com outros arquivos
+15. **SEMPRE** Popular este arquivo ao final da codificação com as variáveis e constantes criadas em cada arquivo
+16. **SEMPRE** Priorize criar funções em arquivos distintos para que possam ser utilizados e chamados em arquivos que serão criados futuramente
+
+## 🤖 PROTOCOLO DE ATUALIZAÇÃO AUTOMÁTICA DO CLAUDE.md
+
+**TRIGGERS OBRIGATÓRIOS PARA ATUALIZAÇÃO:**
+### 🔄 A CADA INTERAÇÃO - ATUALIZAÇÃO CONTÍNUA E IMEDIATA:
+
+1. **AVALIAR IMPACTO:** Analisar se a mudança afeta:
+   - Status de funcionalidades (seção STATUS ATUAL)
+   - Regras de negócio ou processos operacionais
+   - Arquitetura técnica ou dependências
+   - Problemas conhecidos ou soluções
+   - Próximas ações prioritárias
+   - Analisar a cadeia como um todo, avaliando todos os arquivos que precisarão ser alterados para eficiência da tarefa solicitada
+   - Implemente as alterações de código em todos os arquivos necessários para garantir o funcionamento da solução
+
+2. **ATUALIZAR SEÇÕES RELEVANTES:**
+   - ✅ **STATUS ATUAL**: Atualizar percentual e status de funcionalidades
+   - 📊 **INFORMAÇÕES DO PROJETO**: Data da última atualização
+   - 🚨 **PROBLEMAS CONHECIDOS**: Adicionar/resolver/atualizar problemas
+   - 🎯 **PRÓXIMAS AÇÕES**: Mover itens entre pendente/progresso/concluído
+   - 📈 **HISTÓRICO DE SESSÕES**: Documentar sessão atual quando relevante
+   - 🔧 **COMANDOS**: Adicionar novos comandos descobertos/criados
+
+3. **DOCUMENTAR MUDANÇAS:**
+   - Registrar commits realizados
+   - Documentar soluções implementadas
+   - Atualizar dependências ou configurações
+   - Registrar decisões técnicas tomadas
+
+4. **VALIDAR CONSISTÊNCIA:**
+   - Verificar se informações estão atualizadas
+   - Confirmar se status reflete realidade atual
+   - Validar se próximas ações fazem sentido
+   - Checar se histórico está completo
+
+**MOMENTO DA ATUALIZAÇÃO:**
+- 🔥 **A CADA INTERAÇÃO** - Nunca aguardar fim de sessão
+- ✅ **IMEDIATAMENTE** após qualquer mudança, por menor que seja
+- ✅ **OBRIGATÓRIO** durante a resolução de problemas (não apenas ao final)
+- ✅ **AUTOMÁTICO** ao descobrir qualquer nova informação
+- ⚠️ **CRÍTICO:** Evitar perda de progresso entre sessões - atualizar SEMPRE
+
+**CRITÉRIO "MUDANÇA SIGNIFICATIVA" (QUALQUER ITEM EXIGE ATUALIZAÇÃO):**
+- ✅ Leitura de arquivos para entender estado atual
+- ✅ Correção de bugs ou problemas (mesmo parciais)
+- ✅ Implementação de funcionalidades (mesmo incompletas)
+- ✅ Alteração em arquivos de configuração
+- ✅ Deploy ou commits realizados
+- ✅ Descoberta de novos problemas ou limitações
+- ✅ Mudança em status de funcionalidades
+- ✅ Alteração em processos ou regras de negócio
+- ✅ Configuração de novas dependências/APIs
+- ✅ Identificação de novos requisitos ou tarefas
+- ✅ Análise de código ou arquitetura
+- ✅ Teste de funcionalidades
+- ⚠️ **REGRA:** Se duvidou se deve atualizar = DEVE ATUALIZAR
+
 ## 🎯 CONTEXTO DO PROJETO
 
 **TOIT (The One in Tech)** é uma plataforma empresarial que agrega múltiplos sistemas:
