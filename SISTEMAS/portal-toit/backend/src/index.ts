@@ -40,8 +40,8 @@ app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files (including login page)
-app.use(express.static(path.join(__dirname, '../../frontend')));
+// Serve static files (including login page) - Disabled for backend-only deploy
+// app.use(express.static(path.join(__dirname, '../../frontend')));
 
 // Health check
 app.get('/health', (req, res) => {
@@ -66,19 +66,25 @@ app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/contact', contactRoutes);
 
-// Login page route (serve login-sso.html)
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../frontend/login-sso.html'));
-});
+// Frontend routes - Disabled for backend-only deploy
+// app.get('/login', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../../frontend/login-sso.html'));
+// });
 
-// Default route para portal
-app.get('/portal*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../frontend/portal_blueworld_toit.html'));
-});
+// app.get('/portal*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../../frontend/portal_blueworld_toit.html'));
+// });
 
-// Root redirect
+// Root redirect - API only
 app.get('/', (req, res) => {
-  res.redirect('/login');
+  res.json({ 
+    message: 'Portal TOIT Backend API',
+    endpoints: {
+      health: '/health',
+      auth: '/api/auth',
+      dashboard: '/api/dashboard'
+    }
+  });
 });
 
 // Error handling
