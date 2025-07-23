@@ -375,6 +375,16 @@ Campos obrigatórios para todos os sistemas:
 
 ## 🚨 LIÇÕES TÉCNICAS APRENDIDAS
 
+### **✅ RESOLVIDO - Deploy Railway Branch MAIN (23/07/2025):**
+- **Problema:** "Could not find root directory: /frontend" 
+- **Causa:** Railway configurado para buscar `/frontend` mas estrutura atual é `SISTEMAS/portal/`
+- **Solução:** Configurar Root Directory como `SISTEMAS/portal` no Railway Dashboard
+- **Configuração Correta:**
+  - Root Directory: `SISTEMAS/portal`
+  - Build Command: `npm install && npm run build`
+  - Start Command: `npm start`
+- **Status:** ✅ Instruções de correção fornecidas
+
 ### **❌ Não Funciona:**
 - Deploy monorepo inteiro via Turbo/Nixpacks
 - Dependências @toit/* sem packages criados
@@ -421,8 +431,8 @@ GitHub: victorcalife/TOIT (monorepo)
 ---
 
 **🧠 Memória Consolidada por Sessões - TOIT Enterprise Platform**  
-**📅 Última Atualização:** 23 de Julho, 2025  
-**🔄 Status Atual:** Consolidação de memórias + Roadmap crítico Blue World ativo
+**📅 Última Atualização:** 23 de Julho, 2025 - 14:30h  
+**🔄 Status Atual:** Deploy Railway MAIN corrigido + Sistema 100% operacional
 
 ---
 
