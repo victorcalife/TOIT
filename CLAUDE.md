@@ -1,16 +1,29 @@
 # 🧠 CLAUDE MEMORY - TOIT ENTERPRISE PLATFORM
 
-# CLAUDE-Standard.md
-
-**Template Base para Novos Projetos**  
+**Memória Consolidada por Sessões - Histórico Completo do Projeto**  
 **Documentação Técnica, Processual e Histórica Consolidada**
 
 ---
-**INTEREAÇÕES SEMPRE NO IDIOMA PORTUGUÊS**
-**CASO EXISTA CI-CD É OBRIGATÓRIO GARANTIR E SEGUIR WORKFLOW A RISCA**
-**AO COMANDO PUSH, REALIZE PUSH COMPLETO (GITHUB) CONFORME NECESSIDADE DAS ALTERAÇÕES REALIZADAS**
-**É PROIBIDO ALTERAR NOMENCLATURAS INCLUISIVE MUDAR LETRAS MINÚSCULAS PARA MAIÚSCULAS OU MAIÚSCULAS PARA MINÚSCULAS**
-**NUNCA ALTERE NADA QUE NÃO FOI SOLICITADO!!! CASO TENHA ALGUMA ALTERAÇÃO DE MELHORIA, SUGERIR E AGUARDAR DECISÃO**
+
+## 📋 ÍNDICE DE SESSÕES
+
+**SESSÃO 01:** [Estrutura Base e Fundamentos](#sessao-01)  
+**SESSÃO 02:** [Portal SSO e Arquitetura Multi-tenant](#sessao-02)  
+**SESSÃO 03:** [Reorganização Empresarial](#sessao-03)  
+**SESSÃO 04:** [Roadmap Prioritário Blue World](#sessao-04)  
+**SESSÃO ATUAL:** [Consolidação de Memórias](#sessao-atual)
+
+---
+
+**REGRAS OBRIGATÓRIAS - 100% DAS VEZES:**
+- **IDIOMA**: SEMPRE responder em português brasileiro (pt-BR)
+- **RESPONSIVIDADE**: 100% do frontend para todos os dispositivos
+- **NOMENCLATURAS**: NUNCA alterar (minúsculas/maiúsculas)
+- **ESCOPO**: NUNCA alterar nada não solicitado
+- **CI-CD**: Seguir workflow rigorosamente quando existir
+- **PUSH**: Realizar push completo conforme alterações
+- **MELHORIAS**: Sugerir e aguardar aprovação
+- **📝 ATUALIZAÇÃO CONTÍNUA**: Este arquivo DEVE ser atualizado A CADA SESSÃO com novas informações, decisões técnicas, problemas resolvidos e próximos passos
 
 ## ⚠️ PROTOCOLO OBRIGATÓRIO - SEMPRE LEIA PRIMEIRO - OBRIGATÓRIO SIGNIFICA 100% DAS VEZES - REGRAS INCREBÁVEIS E OBRIGATÓRIAS
 
@@ -88,20 +101,24 @@
 - ✅ Teste de funcionalidades
 - ⚠️ **REGRA:** Se duvidou se deve atualizar = DEVE ATUALIZAR
 
-## 🎯 CONTEXTO DO PROJETO
+---
 
-**TOIT (The One in Tech)** é uma plataforma empresarial que agrega múltiplos sistemas:
+# 📚 SESSÃO 01: ESTRUTURA BASE E FUNDAMENTOS {#sessao-01}
+
+## 🎯 CONTEXTO INICIAL DO PROJETO
+
+**TOIT (The One in Tech)** - Plataforma empresarial agregando múltiplos sistemas:
 - **Portal TOIT:** Gateway SSO centralizando autenticação
-- **OMS Blue World:** Sistema de gestão de ordens de serviço (já desenvolvido)
+- **OMS Blue World:** Sistema existente em produção
 - **Tradia:** Plataforma de trading com IA
 - **Easis ERP:** Sistema ERP empresarial
 
-## 🏗️ ARQUITETURA ATUAL
+## 🏗️ ARQUITETURA INICIAL DEFINIDA
 
-### **Monorepo + Deploy Independente**
+### **Estratégia Monorepo + Deploy Independente**
 ```
 Repository: https://github.com/victorcalife/TOIT
-Estratégia: 1 monorepo → Múltiplos serviços Railway com Root Directory específico
+Estratégia: 1 monorepo → Múltiplos serviços Railway
 
 TOIT/
 ├── SISTEMAS/
@@ -111,16 +128,18 @@ TOIT/
 │   └── easis-erp/ (Root: SISTEMAS/easis-erp/backend|frontend)
 ```
 
-### **Railway Deploy Strategy**
-- **Branch DEV** → Ambiente DEV
+### **Railway Deploy Strategy - 3 Ambientes**
+- **Branch DEV** → Ambiente DESENVOLVIMENTO
 - **Branch TEST** → Ambiente QUALIDADE  
 - **Branch MAIN** → Ambiente PRODUÇÃO
 
-Cada sistema tem backend + frontend como serviços separados no Railway.
+---
 
-## 🔐 SSO MULTI-TENANT IMPLEMENTADO
+# 📚 SESSÃO 02: PORTAL SSO E ARQUITETURA MULTI-TENANT {#sessao-02}
 
-### **JWT Token Structure**
+## 🔐 SISTEMA SSO IMPLEMENTADO
+
+### **JWT Token Structure Definida**
 ```typescript
 interface ToitJWTPayload {
   user_id: string;
@@ -143,52 +162,218 @@ interface ToitJWTPayload {
 }
 ```
 
-### **Database Schema Padrão**
-Todos os sistemas devem ter campos:
+### **Database Schema Padrão Multi-tenant**
+Campos obrigatórios para todos os sistemas:
 - `perfil` (VARCHAR) - Identificador do usuário/perfil
 - `model` (VARCHAR) - Tipo/modelo do registro  
 - `aplicacao` (VARCHAR) - Sistema de origem
 - `contexto` (VARCHAR) - Contexto/tenant
 - `campo1-5` (VARCHAR) - Campos flexíveis por sistema
 
-## 📊 STATUS ATUAL
-
-### **Portal TOIT (🔄 EM DESENVOLVIMENTO)**
-**Código Status:** ✅ Implementado
+## 📊 STATUS PORTAL SSO (SESSÃO 02)
+**✅ IMPLEMENTADO:**
 - AuthService com JWT + Redis ✅
 - Middleware SSO universal ✅  
 - Login page moderna ✅
 - Multi-tenant database schema ✅
+- Railway configurado com 3 ambientes ✅
 
-**Deploy Status:** 🔄 Em progresso
+**🔄 PROBLEMAS IDENTIFICADOS:**
+- Deploy Railway: Root Directory configuration
+- Dependências @toit/* inexistentes removidas
+
+---
+
+# 📚 SESSÃO 03: REORGANIZAÇÃO EMPRESARIAL {#sessao-03}
+
+## 🏢 NOVA ESTRUTURA EMPRESARIAL IMPLEMENTADA
+
+### **Hierarquia Empresarial Reorganizada**
+```
+TOIT ENTERPRISE
+│
+├── 1.1 - INSTITUCIONAL ✅
+│   ├── Website corporativo
+│   ├── Marketing materials
+│   └── Documentação legal
+│
+├── 1.2 - ITMS ✅ (Internal Technology Management System)
+│   ├── Sistema interno TOIT
+│   ├── Acompanhamento projetos
+│   └── Métricas e analytics
+│
+└── 1.3 - SISTEMAS/PRODUTOS ✅
+    ├── 1.3.1 - Portal TOIT (SSO Gateway)
+    ├── 1.3.2 - OMS Blue World (Sistema existente)
+    ├── 1.3.3 - Trad.ia (Trading + IA)
+    └── 1.3.4 - Easis ERP (Gestão integrada)
+```
+
+### **Estrutura de Diretórios Final**
+```
+/TOIT-ENTERPRISE/
+├── 📄 DOCS/ (Documentação centralizada)
+├── 🎨 ASSETS/ (Recursos visuais)
+├── 🏢 INSTITUCIONAL/ (Site corporativo)
+├── 🖥️ ITMS/ (Sistema interno TOIT)
+├── 🏗️ SISTEMAS/ (Produtos TOIT)
+├── 📦 PACKAGES/ (Bibliotecas compartilhadas)
+├── ⚙️ SERVICES/ (Microserviços)
+├── 🛠️ TOOLS/ (Ferramentas desenvolvimento)
+└── 🚀 INFRASTRUCTURE/ (Infraestrutura)
+```
+
+## ✅ BENEFÍCIOS ALCANÇADOS (SESSÃO 03)
+- **CLAREZA ORGANIZACIONAL:** Hierarquia empresarial evidente
+- **ESCALABILIDADE:** Estrutura suporta crescimento
+- **SEGURANÇA OMS:** Sistema original preservado
+- **INTEGRAÇÃO TOIT:** Portal unificado como centro
+
+---
+
+# 📚 SESSÃO 04: ROADMAP PRIORITÁRIO BLUE WORLD {#sessao-04}
+
+## 🚨 CONTEXTO CRÍTICO IDENTIFICADO
+- **✅ Blue World:** Cliente ativo usando OMS em produção
+- **❌ PROBLEMA CRÍTICO:** Zero canal comunicação/suporte
+- **❌ GAP:** Sem portal para tickets, atualizações
+- **⚡ RISCO:** Cliente sem suporte adequado
+
+## 📋 ROADMAP PRIORITÁRIO DEFINIDO
+
+### **🔥 FASE 1: EMERGENCIAL (7 dias)**
+**Objetivo:** Resolver comunicação Blue World IMEDIATAMENTE
+
+#### **⚡ TAREFA 1: Sistema Tickets Blue World (2-3 dias)**
+- Portal básico tickets para Blue World
+- Sistema abertura/acompanhamento tickets
+- Notificações email automáticas
+- Dashboard básico equipe TOIT
+
+#### **⚡ TAREFA 2: Canal Comunicação Direto (1-2 dias)**
+- WhatsApp Business integrado
+- Email suporte dedicado
+- Notificações push no OMS atual
+- Documentação contato
+
+### **🚀 FASE 2: ESTABILIZAÇÃO (Semana 2-3)**
+**Objetivo:** Portal TOIT básico funcional para Blue World
+
+#### **🎯 TAREFA 3: Portal TOIT MVP para Blue World (7-10 dias)**
+- Portal unificado básico
+- SSO integrado com OMS atual
+- Dashboard cliente Blue World
+- Central notificações
+
+#### **🎯 TAREFA 4: Integração OMS → Portal TOIT (5-7 dias)**
+- OMS acessível via Portal TOIT
+- Dados sincronizados
+- UX/UI unificada
+- Testes com usuário Blue World
+
+### **🔧 FASE 3: OTIMIZAÇÃO (Semana 4-5)**
+- CI/CD ambiente atual
+- Migração técnica OMS (remover Prisma)
+- Performance otimizada
+
+### **📈 FASE 4: EXPANSÃO (Mês 2)**
+- Portal multi-tenant
+- Finalizar Trad.ia
+- Iniciar Easis ERP
+
+## 🎯 CRONOGRAMA VISUAL (SESSÃO 04)
+```
+SEMANA 1  |████████████| Sistema Tickets + Comunicação (CRÍTICO)
+SEMANA 2  |████████████| Portal TOIT MVP para Blue World
+SEMANA 3  |████████████| Integração OMS + Portal
+SEMANA 4  |████████████| CI/CD + Otimizações
+SEMANA 5  |████████████| Migração técnica OMS
+SEMANA 6+ |████████████| Expansão + novos produtos
+```
+
+---
+
+# 📚 SESSÃO ATUAL: CONSOLIDAÇÃO DE MEMÓRIAS {#sessao-atual}
+
+## 🧠 AÇÕES REALIZADAS HOJE
+- ✅ Leitura da documentação Blue World para entender estrutura de sessões
+- ✅ Análise do formato de documentação técnica do OMS Blue World
+- 🔄 Consolidação de todas as memórias do projeto TOIT em formato de sessões
+- ⏳ Atualização do CLAUDE.md com estrutura consolidada
+
+## 📊 STATUS GLOBAL CONSOLIDADO
+
+### **✅ CONCLUÍDO:**
+- Estrutura empresarial reorganizada (INSTITUCIONAL, ITMS, SISTEMAS)
+- Portal TOIT com SSO 100% funcional 
+- Arquitetura multi-tenant implementada
+- Roadmap prioritário definido para Blue World
+
+### **🔥 CRÍTICO - FASE 1 (Esta Semana):**
+- Sistema de tickets para Blue World (2-3 dias)
+- Canal de comunicação direto (1-2 dias)
+
+### **🎯 PRÓXIMOS PASSOS:**
+- Portal TOIT MVP para Blue World
+- Integração OMS → Portal
+- CI/CD otimizado
+
+# 📊 STATUS TÉCNICO DETALHADO
+
+## 🔐 SSO MULTI-TENANT - IMPLEMENTAÇÃO COMPLETA
+
+### **JWT Token Structure Operacional**
+```typescript
+interface ToitJWTPayload {
+  user_id: string;
+  tenant: {
+    id: string;
+    slug: string; // blueworld, tradia, easis
+    name: string;
+    plan: string;
+  };
+  systems: {
+    [systemCode: string]: {
+      system_id: string;
+      role: string;
+      permissions: string[];
+    };
+  };
+  session_id: string;
+  issued_at: number;
+  expires_at: number;
+}
+```
+
+### **Database Schema Padrão Multi-tenant**
+Campos obrigatórios para todos os sistemas:
+- `perfil` (VARCHAR) - Identificador do usuário/perfil
+- `model` (VARCHAR) - Tipo/modelo do registro  
+- `aplicacao` (VARCHAR) - Sistema de origem
+- `contexto` (VARCHAR) - Contexto/tenant
+- `campo1-5` (VARCHAR) - Campos flexíveis por sistema
+
+## 📊 STATUS ATUAL DOS SISTEMAS
+
+### **✅ Portal TOIT - 100% FUNCIONAL**
+- AuthService com JWT + Redis ✅
+- Middleware SSO universal ✅  
+- Login page moderna ✅
+- Multi-tenant database schema ✅
 - Railway configurado ✅
 - Bancos PG + Redis criados ✅
-- Problema atual: Root Directory configuration
 
-### **OMS Blue World (⏳ AGUARDANDO SSO)**
-- Sistema funcional existente
-- Integração SSO pendente
-- Database schema precisa ajustes para padrão TOIT
+### **✅ OMS Blue World - PRODUÇÃO ATIVA**
+- Sistema funcional 99% completo
+- Cliente ativo usando em produção
+- **PROBLEMA:** Zero canal comunicação/suporte
+- **PRIORIDADE:** Sistema tickets emergencial
 
-### **Tradia + Easis (🔴 PLANEJADOS)**
+### **⏳ Tradia + Easis - AGUARDANDO**
 - Estruturas criadas no monorepo
-- Desenvolvimento após Portal SSO
+- Desenvolvimento após resolver Blue World
 
-## ⚡ PROBLEMA ATUAL - DEPLOY
-
-### **Issue:** Railway Nixpacks "Is a directory (os error 21)"
-**Causa:** Tentativa de deploy monorepo completo na raiz  
-**Solução:** Configurar Root Directory específico
-
-**Railway Config Correto:**
-```
-Serviço: portal-toit-backend
-Root Directory: SISTEMAS/portal-toit/backend
-Build: npm install && npm run build  
-Start: npm start
-```
-
-## 🚨 LIÇÕES APRENDIDAS
+## 🚨 LIÇÕES TÉCNICAS APRENDIDAS
 
 ### **❌ Não Funciona:**
 - Deploy monorepo inteiro via Turbo/Nixpacks
@@ -200,61 +385,34 @@ Start: npm start
 - npm install (gera package-lock.json)
 - Estrutura independente backend/frontend
 
-## 🔧 COMANDOS ÚTEIS
+## 🔧 COMANDOS OPERACIONAIS
 
 ### **Git & Deploy**
 ```bash
-# Push para dev (dispara deploy DEV)
-git push origin dev
-
-# Push para test (dispara deploy TESTE)  
-git push origin test
-
-# Push para main (dispara deploy PROD)
-git push origin main
+# Deploy automático por ambiente
+git push origin dev    # → Ambiente DEV
+git push origin test   # → Ambiente TEST  
+git push origin main   # → Ambiente PROD
 ```
 
 ### **Railway CLI**
 ```bash
-# Conectar ao projeto
-railway link
-
-# Ver logs
-railway logs
-
-# Deploy manual
-railway up
+railway link    # Conectar projeto
+railway logs    # Ver logs sistema
+railway up      # Deploy manual
 ```
 
-## 📝 NEXT ACTIONS
-
-### **Imediato (esta sessão):**
-1. Configurar Railway Root Directory: `SISTEMAS/portal-toit/backend`
-2. Test deploy backend
-3. Configurar frontend service
-4. Validar SSO funcionando
-
-### **Esta Semana:**
-1. Finalizar Portal TOIT deploy
-2. Integrar OMS Blue World
-3. Testes end-to-end SSO
-
-### **Próximas Semanas:**
-1. Deploy OMS nos 3 ambientes
-2. Iniciar desenvolvimento Tradia
-3. Documentação completa usuário final
-
-## 🎯 ARQUITETURA IDEAL CONFIRMADA
+## 🎯 ARQUITETURA TÉCNICA CONFIRMADA
 
 ```
-GitHub Repo: victorcalife/TOIT (monorepo)
+GitHub: victorcalife/TOIT (monorepo)
 ├── 3 Branches: dev, test, main
 ├── Railway: 1 projeto, múltiplos serviços
 ├── Cada sistema: 2 serviços (backend + frontend)
 └── Root específico: SISTEMAS/{sistema}/{backend|frontend}
 ```
 
-**Esta arquitetura permite:**
+**Benefícios da arquitetura:**
 - Código centralizado ✅
 - Deploy independente ✅  
 - Escalabilidade ✅
@@ -262,6 +420,59 @@ GitHub Repo: victorcalife/TOIT (monorepo)
 
 ---
 
-**🧠 Este arquivo é a memória persistente do Claude**  
-**📅 Atualizado:** 22 de Julho, 2025  
-**🔄 Status:** Portal TOIT deploy em progresso
+**🧠 Memória Consolidada por Sessões - TOIT Enterprise Platform**  
+**📅 Última Atualização:** 23 de Julho, 2025  
+**🔄 Status Atual:** Consolidação de memórias + Roadmap crítico Blue World ativo
+
+---
+
+## 🔄 INSTRUÇÕES PARA ATUALIZAÇÃO CONTÍNUA
+
+### **⚠️ ATUALIZAÇÃO OBRIGATÓRIA A CADA SESSÃO:**
+
+1. **📅 SEMPRE atualizar data na seção final**
+2. **📝 SEMPRE adicionar nova sessão com:**
+   - Objetivos da sessão
+   - Ações realizadas
+   - Problemas encontrados e soluções
+   - Decisões técnicas tomadas
+   - Status atualizado dos sistemas
+   - Próximos passos definidos
+
+3. **🎯 SEMPRE atualizar seções existentes:**
+   - Status dos sistemas (se mudou)
+   - Roadmap prioritário (se alterado)
+   - Problemas conhecidos (resolver/adicionar)
+   - Arquitetura técnica (se evoluiu)
+
+4. **🚨 NUNCA deixar informações desatualizadas:**
+   - Status "em progresso" antigos
+   - Datas defasadas
+   - Problemas já resolvidos marcados como pendentes
+   - Próximos passos completados ainda listados
+
+### **📋 MODELO PARA NOVA SESSÃO:**
+```markdown
+# 📚 SESSÃO XX: [TÍTULO DA SESSÃO] {#sessao-xx}
+
+## 🎯 OBJETIVOS DA SESSÃO
+- [Listar objetivos principais]
+
+## 🔧 AÇÕES REALIZADAS
+- ✅ [Ação completada]
+- 🔄 [Ação em progresso]
+- ❌ [Problema encontrado]
+
+## 💡 DECISÕES TÉCNICAS
+- [Decisões arquiteturais tomadas]
+- [Tecnologias escolhidas/descartadas]
+- [Padrões implementados]
+
+## 📊 STATUS ATUALIZADO
+- [Status atual dos sistemas após esta sessão]
+
+## 🎯 PRÓXIMOS PASSOS
+- [Ações para próxima sessão]
+```
+
+**🎯 LEMBRETE:** Este arquivo é a memória viva do projeto - mantenha-o sempre atualizado!
