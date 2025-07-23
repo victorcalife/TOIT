@@ -35,10 +35,9 @@
 - **Portal TOIT:** https://github.com/victorcalife/TOIT-Portal
 - **OMS Blue World:** Repositório separado com integração SSO
 
-### **Ambientes de Deploy (Railway)**
-- **Branch DEV** → Ambiente DESENVOLVIMENTO → https://toitportaldev.up.railway.app
-- **Branch TEST** → Ambiente QUALIDADE → https://toitportaltest.up.railway.app
-- **Branch MAIN** → Ambiente PRODUÇÃO → https://toitportal.up.railway.app
+### **Ambientes de Deploy (Railway) - NOVA ESTRUTURA:**
+- **Branch DEV** → Ambiente DQA (Development + Quality Assurance) → Root: `frontend`
+- **Branch MAIN** → Ambiente PRODUCTION → Root: `Frontend` → Para Blue World + clientes reais
 
 ## 📊 STATUS ATUAL COMPLETO
 
