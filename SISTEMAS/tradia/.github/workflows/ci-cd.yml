@@ -1,0 +1,369 @@
+name: TRADia CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, test, dev ]
+  pull_request:
+    branches: [ main, test ]
+
+env:
+  NODE_VERSION: '18.x'
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  # ================================
+  # QUALITY CHECKS
+  # ================================
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Lint backend
+      run: npm run lint:backend
+
+    - name: Lint frontend
+      run: npm run lint:frontend
+
+    - name: Type check
+      run: npm run type-check
+
+  # ================================
+  # TESTS
+  # ================================
+  test:
+    runs-on: ubuntu-latest
+    needs: quality
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: tradia_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install Python dependencies
+      run: |
+        cd ai-engine
+        pip install -r requirements.txt
+
+    - name: Run database migrations
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/tradia_test
+      run: npm run db:migrate
+
+    - name: Run backend tests
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/tradia_test
+        REDIS_URL: redis://localhost:6379
+        NODE_ENV: test
+      run: npm run test:backend
+
+    - name: Run frontend tests
+      run: npm run test:frontend
+
+    - name: Generate test coverage
+      run: npm run coverage
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+
+  # ================================
+  # BUILD
+  # ================================
+  build:
+    runs-on: ubuntu-latest
+    needs: [quality, test]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build backend
+      run: npm run build:backend
+
+    - name: Build frontend
+      run: npm run build:frontend
+
+    - name: Archive build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifacts
+        path: |
+          backend/dist/
+          frontend/dist/
+        retention-days: 7
+
+  # ================================
+  # DEPLOY TO DEVELOPMENT
+  # ================================
+  deploy-dev:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/dev'
+    environment: development
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-artifacts
+
+    - name: Deploy to Railway (Development)
+      uses: railway-app/cli@v3
+      with:
+        command: up --service tradia-dev
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_DEV }}
+
+    - name: Run database migrations (Dev)
+      uses: railway-app/cli@v3
+      with:
+        command: run --service tradia-dev "npm run db:migrate"
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_DEV }}
+
+    - name: Health check (Dev)
+      run: |
+        sleep 30
+        curl -f https://tradia-dev.up.railway.app/health || exit 1
+
+    - name: Notify deployment (Dev)
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#tradia-deployments'
+        text: '🚀 TRADia deployed to Development environment'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  # ================================
+  # DEPLOY TO TESTING
+  # ================================
+  deploy-test:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/test'
+    environment: testing
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-artifacts
+
+    - name: Deploy to Railway (Testing)
+      uses: railway-app/cli@v3
+      with:
+        command: up --service tradia-test
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_TEST }}
+
+    - name: Run database migrations (Test)
+      uses: railway-app/cli@v3
+      with:
+        command: run --service tradia-test "npm run db:migrate"
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_TEST }}
+
+    - name: Run E2E tests
+      run: |
+        sleep 30
+        npm run test:e2e
+      env:
+        BASE_URL: https://tradia-test.up.railway.app
+
+    - name: Health check (Test)
+      run: |
+        curl -f https://tradia-test.up.railway.app/health || exit 1
+
+    - name: Notify deployment (Test)
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#tradia-deployments'
+        text: '🧪 TRADia deployed to Testing environment'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  # ================================
+  # DEPLOY TO PRODUCTION
+  # ================================
+  deploy-prod:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-artifacts
+
+    - name: Create backup
+      uses: railway-app/cli@v3
+      with:
+        command: run --service postgres-prod "pg_dump \$DATABASE_URL > backup_$(date +%Y%m%d_%H%M%S).sql"
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_PROD }}
+
+    - name: Deploy to Railway (Production)
+      uses: railway-app/cli@v3
+      with:
+        command: up --service tradia-prod
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_PROD }}
+
+    - name: Run database migrations (Prod)
+      uses: railway-app/cli@v3
+      with:
+        command: run --service tradia-prod "npm run db:migrate"
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_PROD }}
+
+    - name: Health check (Prod)
+      run: |
+        sleep 60
+        curl -f https://tradia.up.railway.app/health || exit 1
+
+    - name: Smoke tests (Prod)
+      run: |
+        npm run test:smoke
+      env:
+        BASE_URL: https://tradia.up.railway.app
+
+    - name: Notify deployment (Prod)
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#tradia-deployments'
+        text: '🎉 TRADia deployed to Production! https://tradia.up.railway.app'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  # ================================
+  # SECURITY SCAN
+  # ================================
+  security:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+    - name: Dependency check
+      run: |
+        npm audit --audit-level high
+        cd frontend && npm audit --audit-level high
+        cd ../backend && npm audit --audit-level high
+
+  # ================================
+  # PERFORMANCE MONITORING
+  # ================================
+  performance:
+    runs-on: ubuntu-latest
+    needs: deploy-prod
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Lighthouse CI
+      run: |
+        npm install -g @lhci/cli@0.12.x
+        lhci autorun
+      env:
+        LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        LHCI_SERVER_TOKEN: ${{ secrets.LHCI_SERVER_TOKEN }}
+
+    - name: Load testing
+      run: |
+        # Install k6
+        sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+        echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+        sudo apt-get update
+        sudo apt-get install k6
+        
+        # Run load tests
+        k6 run --duration 5m --vus 50 tests/load/api-test.js
+      env:
+        BASE_URL: https://tradia.up.railway.app

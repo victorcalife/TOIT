@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAD.IA - Plataforma de Sinais | Informações de IA para sua decisão</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #dc2626;
+            --dark: #111827;
+            --light: #f3f4f6;
+            --gradient: linear-gradient(135deg, #7c3aed 0%, #10b981 100%);
+            --gradient-premium: linear-gradient(45deg, #7c3aed 0%, #f59e0b 50%, #10b981 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-diamond {
+            font-size: 20px;
+            line-height: 0.6;
+            text-align: center;
+            background: linear-gradient(135deg, #7C3AED 0%, #10B981 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            50% { 
+                transform: scale(1.05);
+                filter: brightness(1.2);
+            }
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.75rem;
+            color: #1f2937;
+            letter-spacing: -1px;
+        }
+
+        .logo-text .ia {
+            font-style: italic;
+            background: linear-gradient(90deg, #7C3AED 0%, #10B981 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .capital-display {
+            background: var(--gradient);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '◆';
+            position: absolute;
+            top: 10%;
+            right: 10%;
+            font-size: 150px;
+            opacity: 0.05;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '◆';
+            position: absolute;
+            bottom: 10%;
+            left: 10%;
+            font-size: 200px;
+            opacity: 0.03;
+            animation: float 12s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+        }
+
+        .hero-subtitle {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+
+        .capital-input-section {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 500px;
+            backdrop-filter: blur(10px);
+        }
+
+        .capital-input-section h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .capital-input-group {
+            display: flex;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .capital-input-group input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .capital-input-group button {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .capital-input-group button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Main Dashboard */
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card.positive {
+            border-left-color: #10b981;
+        }
+
+        .stat-card.negative {
+            border-left-color: #ef4444;
+        }
+
+        .stat-card.neutral {
+            border-left-color: #6366f1;
+        }
+
+        .stat-card h3 {
+            color: #374151;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .change {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .positive .value,
+        .positive .change {
+            color: #10b981;
+        }
+
+        .negative .value,
+        .negative .change {
+            color: #ef4444;
+        }
+
+        .neutral .value {
+            color: #6366f1;
+        }
+
+        /* Signals Section */
+        .signals-section {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .signals-header {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .signals-header h2 {
+            color: #1e293b;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #10b981;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .signals-content {
+            padding: 1.5rem;
+        }
+
+        /* Signal Cards */
+        .signal-card {
+            background: #f8fafc;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .signal-card:hover {
+            background: #f1f5f9;
+            transform: translateX(5px);
+        }
+
+        .signal-card.buy {
+            border-left-color: #10b981;
+        }
+
+        .signal-card.sell {
+            border-left-color: #ef4444;
+        }
+
+        .signal-card.urgent {
+            border-left-color: #dc2626;
+            background: linear-gradient(135deg, #fef2f2 0%, #fef2f2 100%);
+            animation: urgentPulse 2s infinite;
+        }
+
+        @keyframes urgentPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+        }
+
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .signal-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .action-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .action-badge.buy {
+            background: #10b981;
+        }
+
+        .action-badge.sell {
+            background: #ef4444;
+        }
+
+        .confidence-badge {
+            background: #6366f1;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .signal-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .signal-detail {
+            text-align: center;
+        }
+
+        .signal-detail label {
+            color: #64748b;
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .signal-detail .value {
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .signal-reasoning {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(124, 58, 237, 0.05);
+            border-radius: 0.5rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .execution-status {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .execution-status.executed {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .execution-status.not-executed {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+        .execution-status.pending {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #f59e0b;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        /* Sidebar Content */
+        .performance-summary {
+            margin-bottom: 2rem;
+        }
+
+        .performance-summary h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .performance-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .performance-item:last-child {
+            border-bottom: none;
+        }
+
+        .performance-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .performance-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .performance-value.positive {
+            color: #10b981;
+        }
+
+        .performance-value.negative {
+            color: #ef4444;
+        }
+
+        /* Chart Section */
+        .chart-section {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .chart-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .signal-details {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .capital-input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6d28d9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <div class="logo-diamond">◆</div>
+                <div class="logo-text">TRAD<span class="ia">.IA</span></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#sinais">Sinais</a></li>
+                <li><a href="#performance">Performance</a></li>
+                <li><a href="#config">Configurações</a></li>
+            </ul>
+            <div class="nav-user">
+                <div class="capital-display" id="navCapital">
+                    R$ 61.500
+                </div>
+                <div class="user-menu">
+                    <div class="user-avatar">VT</div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div style="display: inline-flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                <div style="font-size: 48px; line-height: 0.6; background: linear-gradient(135deg, #7C3AED 0%, #10B981 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">◆</div>
+                <h1>TRAD<span style="font-style: italic;">.IA</span></h1>
+            </div>
+            <h2 class="hero-subtitle">PLATAFORMA DE SINAIS</h2>
+            <p>Informações de IA para suas decisões de investimento. Você gerencia seu capital, nós fornecemos os sinais.</p>
+            
+            <div class="capital-input-section">
+                <h3><i class="fas fa-wallet"></i> Atualize Seu Capital</h3>
+                <div class="capital-input-group">
+                    <input type="number" id="capitalInput" placeholder="61500" value="61500">
+                    <button onclick="updateCapital()">
+                        <i class="fas fa-sync-alt"></i> Atualizar
+                    </button>
+                </div>
+                <p style="margin-top: 0.5rem; color: #6b7280; font-size: 0.9rem;">
+                    Use este valor para calcular posições sugeridas
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard -->
+    <section class="dashboard" id="dashboard">
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card positive">
+                <h3><i class="fas fa-wallet"></i> Capital Atual</h3>
+                <div class="value" id="currentCapital">R$ 61.500</div>
+                <div class="change">+R$ 11.500 inicial</div>
+            </div>
+            <div class="stat-card positive">
+                <h3><i class="fas fa-chart-line"></i> Seu Retorno</h3>
+                <div class="value" id="clientReturn">+23.00%</div>
+                <div class="change">7 meses</div>
+            </div>
+            <div class="stat-card neutral">
+                <h3><i class="fas fa-robot"></i> Plataforma</h3>
+                <div class="value">+42.64%</div>
+                <div class="change">Anualizado</div>
+            </div>
+            <div class="stat-card neutral">
+                <h3><i class="fas fa-target"></i> Adesão</h3>
+                <div class="value">60%</div>
+                <div class="change">3 de 5 sinais</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="main-content">
+                <!-- Signals Section -->
+                <div class="signals-section" id="sinais">
+                    <div class="signals-header">
+                        <h2><i class="fas fa-broadcast-tower"></i> Sinais Ativos</h2>
+                        <span class="live-indicator">
+                            <span class="live-dot"></span>
+                            AO VIVO
+                        </span>
+                    </div>
+                    <div class="signals-content">
+                        <!-- Sinal 1 - URGENTE -->
+                        <div class="signal-card urgent">
+                            <div class="signal-header">
+                                <div class="signal-title">
+                                    <span class="action-badge sell">VENDER</span>
+                                    <h3>WEGE3 - STOP LOSS 🚨</h3>
+                                </div>
+                                <span class="confidence-badge">95%</span>
+                            </div>
+                            
+                            <div class="signal-details">
+                                <div class="signal-detail">
+                                    <label>Preço</label>
+                                    <div class="value">R$ 53,60</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Stop</label>
+                                    <div class="value">R$ 53,60</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Urgência</label>
+                                    <div class="value">AGORA</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Risco</label>
+                                    <div class="value">Alto</div>
+                                </div>
+                            </div>
+                            
+                            <div class="signal-reasoning">
+                                <strong>⚠️ URGENTE:</strong> Rompeu suporte importante. Stop loss acionado para proteger capital.
+                            </div>
+                            
+                            <div class="execution-status executed">
+                                ✅ <strong>EXECUTADO:</strong> 180 ações vendidas a R$ 53,58 - Perda controlada: R$ -108
+                            </div>
+                        </div>
+
+                        <!-- Sinal 2 - COMPRA -->
+                        <div class="signal-card buy">
+                            <div class="signal-header">
+                                <div class="signal-title">
+                                    <span class="action-badge buy">COMPRAR</span>
+                                    <h3>B3SA3 - Gap Trading</h3>
+                                </div>
+                                <span class="confidence-badge">82%</span>
+                            </div>
+                            
+                            <div class="signal-details">
+                                <div class="signal-detail">
+                                    <label>Preço</label>
+                                    <div class="value">R$ 11,20</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Target</label>
+                                    <div class="value">R$ 11,56</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Stop</label>
+                                    <div class="value">R$ 10,95</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Valor</label>
+                                    <div class="value" id="b3sa3-amount">R$ 2.460</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Ações</label>
+                                    <div class="value" id="b3sa3-shares">219</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Prazo</label>
+                                    <div class="value">1-3 dias</div>
+                                </div>
+                            </div>
+                            
+                            <div class="signal-reasoning">
+                                <strong>📊 Análise:</strong> Gap de -2.8% na abertura. Volume 3x acima da média. 
+                                Estatisticamente 76% dos gaps fecham em 3 dias.
+                            </div>
+                            
+                            <div class="execution-status pending">
+                                ⏳ <strong>AGUARDANDO:</strong> Decisão do cliente
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn btn-primary" onclick="showInstructions('B3SA3', 'BUY')">
+                                    <i class="fas fa-book"></i> Como Executar
+                                </button>
+                                <button class="btn btn-success" onclick="markAsExecuted('B3SA3')">
+                                    <i class="fas fa-check"></i> Marcar Executado
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sinal 3 - VENDA LUCRO -->
+                        <div class="signal-card sell">
+                            <div class="signal-header">
+                                <div class="signal-title">
+                                    <span class="action-badge sell">VENDER</span>
+                                    <h3>ITUB4 - Take Profit</h3>
+                                </div>
+                                <span class="confidence-badge">85%</span>
+                            </div>
+                            
+                            <div class="signal-details">
+                                <div class="signal-detail">
+                                    <label>Preço</label>
+                                    <div class="value">R$ 34,20</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Target</label>
+                                    <div class="value">R$ 34,80</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Ganho</label>
+                                    <div class="value">+4.48%</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Prazo</label>
+                                    <div class="value">1-2 dias</div>
+                                </div>
+                            </div>
+                            
+                            <div class="signal-reasoning">
+                                <strong>🎯 Análise:</strong> Ação atingiu resistência técnica forte. 
+                                RSI em 78 (overbought). Momento ideal para realizar lucros.
+                            </div>
+                            
+                            <div class="execution-status executed">
+                                ✅ <strong>EXECUTADO:</strong> 60 ações vendidas a R$ 34,15 - Lucro: R$ +180
+                            </div>
+                        </div>
+
+                        <!-- Sinal 4 - COMPRA SWING -->
+                        <div class="signal-card buy">
+                            <div class="signal-header">
+                                <div class="signal-title">
+                                    <span class="action-badge buy">COMPRAR</span>
+                                    <h3>PETR4 - Swing Trade</h3>
+                                </div>
+                                <span class="confidence-badge">78%</span>
+                            </div>
+                            
+                            <div class="signal-details">
+                                <div class="signal-detail">
+                                    <label>Preço</label>
+                                    <div class="value">R$ 38,90</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Target</label>
+                                    <div class="value">R$ 41,20</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Stop</label>
+                                    <div class="value">R$ 37,50</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Valor</label>
+                                    <div class="value" id="petr4-amount">R$ 3.075</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Ações</label>
+                                    <div class="value" id="petr4-shares">79</div>
+                                </div>
+                                <div class="signal-detail">
+                                    <label>Prazo</label>
+                                    <div class="value">5-8 dias</div>
+                                </div>
+                            </div>
+                            
+                            <div class="signal-reasoning">
+                                <strong>📈 Análise:</strong> RSI em 25 (oversold) + MACD com divergência bullish. 
+                                Suporte testado e confirmado em R$ 37,50.
+                            </div>
+                            
+                            <div class="execution-status executed">
+                                ✅ <strong>EXECUTADO:</strong> 120 ações compradas a R$ 38,95 - Posição aberta
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart Section -->
+                <div class="chart-section">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-chart-area"></i> Evolução do Capital</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Performance Summary -->
+                <div class="performance-summary">
+                    <h3><i class="fas fa-trophy"></i> Performance</h3>
+                    <div class="performance-item">
+                        <span class="performance-label">Retorno 30d</span>
+                        <span class="performance-value positive">+2.5%</span>
+                    </div>
+                    <div class="performance-item">
+                        <span class="performance-label">Plataforma 30d</span>
+                        <span class="performance-value neutral">+3.8%</span>
+                    </div>
+                    <div class="performance-item">
+                        <span class="performance-label">Taxa Adesão</span>
+                        <span class="performance-value">60%</span>
+                    </div>
+                    <div class="performance-item">
+                        <span class="performance-label">Acertos</span>
+                        <span class="performance-value positive">50%</span>
+                    </div>
+                    <div class="performance-item">
+                        <span class="performance-label">Lucro Realizado</span>
+                        <span class="performance-value positive">R$ 1.537</span>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div style="margin-bottom: 2rem;">
+                    <h3><i class="fas fa-bolt"></i> Ações Rápidas</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+                        <button class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-chart-line"></i> Ver Análises
+                        </button>
+                        <button class="btn btn-success" style="width: 100%;">
+                            <i class="fas fa-plus"></i> Atualizar Capital
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Next Signals -->
+                <div>
+                    <h3><i class="fas fa-clock"></i> Próximos Sinais</h3>
+                    <div style="font-size: 0.9rem; color: #6b7280; line-height: 1.6; margin-top: 1rem;">
+                        <p>• Setup gap trading amanhã</p>
+                        <p>• Oportunidades pairs trading</p>
+                        <p>• Divergências em small caps</p>
+                        <p>• Monitoramento earnings</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instructions Modal -->
+    <div id="instructionsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Instruções de Execução</h3>
+                <span class="modal-close" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modalBody">
+                <!-- Content will be inserted via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentCapital = 61500;
+
+        // Update capital function
+        function updateCapital() {
+            const newCapital = parseInt(document.getElementById('capitalInput').value);
+            if (newCapital && newCapital > 0) {
+                currentCapital = newCapital;
+                
+                // Update displays
+                document.getElementById('currentCapital').textContent = 'R$ ' + newCapital.toLocaleString('pt-BR');
+                document.getElementById('navCapital').textContent = 'R$ ' + newCapital.toLocaleString('pt-BR');
+                
+                // Update return calculation
+                const initialCapital = 50000;
+                const returnPercent = ((newCapital - initialCapital) / initialCapital * 100).toFixed(2);
+                document.getElementById('clientReturn').textContent = (returnPercent >= 0 ? '+' : '') + returnPercent + '%';
+                
+                // Recalculate position sizes
+                updatePositionSizes();
+                
+                // Show feedback
+                showToast('Capital atualizado com sucesso! 💰', 'success');
+            }
+        }
+
+        // Update position sizes based on capital
+        function updatePositionSizes() {
+            // B3SA3 - 4% of capital
+            const b3sa3Amount = Math.round(currentCapital * 0.04);
+            const b3sa3Shares = Math.floor(b3sa3Amount / 11.20);
+            document.getElementById('b3sa3-amount').textContent = 'R$ ' + b3sa3Amount.toLocaleString('pt-BR');
+            document.getElementById('b3sa3-shares').textContent = b3sa3Shares.toString();
+            
+            // PETR4 - 5% of capital
+            const petr4Amount = Math.round(currentCapital * 0.05);
+            const petr4Shares = Math.floor(petr4Amount / 38.90);
+            document.getElementById('petr4-amount').textContent = 'R$ ' + petr4Amount.toLocaleString('pt-BR');
+            document.getElementById('petr4-shares').textContent = petr4Shares.toString();
+        }
+
+        // Show instructions modal
+        function showInstructions(symbol, action) {
+            const modal = document.getElementById('instructionsModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            title.textContent = `Como ${action === 'BUY' ? 'Comprar' : 'Vender'} ${symbol}`;
+            
+            const instructions = generateInstructions(symbol, action);
+            body.innerHTML = instructions;
+            
+            modal.style.display = 'flex';
+        }
+
+        // Generate instructions content
+        function generateInstructions(symbol, action) {
+            const strategies = {
+                'B3SA3': 'Gap Trading',
+                'PETR4': 'Swing Trade',
+                'ITUB4': 'Take Profit',
+                'WEGE3': 'Stop Loss'
+            };
+            
+            return `
+                <div style="background: #f8fafc; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.5rem;">
+                    <h4>${action === 'BUY' ? '🟢 COMPRAR' : '🔴 VENDER'} ${symbol}</h4>
+                    <p><strong>Estratégia:</strong> ${strategies[symbol] || 'Trading'}</p>
+                </div>
+                
+                <h4>📋 Passos no Home Broker:</h4>
+                <ol style="padding-left: 1.5rem; line-height: 1.8; margin: 1rem 0;">
+                    <li>Acesse sua corretora (Rico, XP, Clear, etc.)</li>
+                    <li>Busque por "${symbol}"</li>
+                    <li>Clique em "${action === 'BUY' ? 'Comprar' : 'Vender'}"</li>
+                    <li>Insira a quantidade sugerida</li>
+                    <li>Confirme a operação</li>
+                </ol>
+                
+                <div style="background: #eff6ff; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+                    <h4 style="color: #1e40af;">🎯 Gestão da Posição:</h4>
+                    <p style="color: #1e40af; margin: 0;">
+                        • Configure stop loss conforme indicado<br>
+                        • Monitore o target price<br>
+                        • Acompanhe o prazo estimado
+                    </p>
+                </div>
+                
+                <div style="background: #fef3c7; padding: 1rem; border-radius: 0.5rem;">
+                    <h4 style="color: #92400e;">📝 Importante:</h4>
+                    <p style="color: #92400e; margin: 0;">
+                        • Marque como executado após a operação<br>
+                        • Anote preço e quantidade exatos<br>
+                        • Atualize seu capital quando necessário
+                    </p>
+                </div>
+            `;
+        }
+
+        // Mark as executed
+        function markAsExecuted(symbol) {
+            const price = prompt(`Digite o preço de execução para ${symbol}:`);
+            const quantity = prompt('Digite a quantidade de ações:');
+            
+            if (price && quantity) {
+                showToast(`✅ ${symbol} marcado como executado!\nPreço: R$ ${price}\nQuantidade: ${quantity} ações`, 'success');
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('instructionsModal').style.display = 'none';
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${type === 'success' ? '#10b981' : '#3b82f6'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                z-index: 3000;
+                max-width: 300px;
+                animation: slideIn 0.3s ease;
+            `;
+            toast.textContent = message;
+            
+            // Add to DOM
+            document.body.appendChild(toast);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize chart
+        function initChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
+                    datasets: [{
+                        label: 'Seu Capital',
+                        data: [50000, 52100, 54250, 56200, 58150, 59800, 61500],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Se seguisse 100%',
+                        data: [50000, 52800, 55900, 58200, 61100, 64300, 67500],
+                        borderColor: '#7c3aed',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize chart
+            initChart();
+            
+            // Initialize position sizes
+            updatePositionSizes();
+            
+            // Add fade-in animation to elements
+            const elements = document.querySelectorAll('.stat-card, .signal-card, .chart-section');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    el.style.transition = 'all 0.5s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('instructionsModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Add CSS for toast animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

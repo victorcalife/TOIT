@@ -1,11 +1,11 @@
 {
   "name": "tradia",
-  "version": "2.0.0", 
+  "version": "2.0.0",
   "description": "Trad.ia - Plataforma de Sinais de Trading com IA",
   "scripts": {
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\" \"npm run dev:ai-engine\"",
     "dev:frontend": "cd frontend && npm run dev",
-    "dev:backend": "cd backend && npm run dev", 
+    "dev:backend": "cd backend && npm run dev",
     "dev:ai-engine": "cd ai-engine && npm run dev",
     "build": "npm run build:frontend && npm run build:backend && npm run build:ai-engine",
     "build:frontend": "cd frontend && npm run build",
@@ -13,14 +13,16 @@
     "build:ai-engine": "cd ai-engine && npm run build",
     "test": "npm run test:frontend && npm run test:backend && npm run test:ai-engine",
     "test:frontend": "cd frontend && npm run test",
-    "test:backend": "cd backend && npm run test", 
+    "test:backend": "cd backend && npm run test",
     "test:ai-engine": "cd ai-engine && npm run test",
     "lint": "npm run lint:frontend && npm run lint:backend && npm run lint:ai-engine",
     "lint:frontend": "cd frontend && npm run lint",
     "lint:backend": "cd backend && npm run lint",
     "lint:ai-engine": "cd ai-engine && npm run lint"
   },
-  "dependencies": {},
+  "dependencies": {
+    "node.js": "^0.0.1-security"
+  },
   "devDependencies": {
     "concurrently": "^8.2.0"
   }

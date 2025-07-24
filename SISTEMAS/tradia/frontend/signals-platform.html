@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAD.IA - Plataforma de Sinais</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .capital-update {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .capital-update input {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 150px;
+        }
+
+        .capital-update button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .capital-update button:hover {
+            background: #059669;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card.positive {
+            border-left-color: #10b981;
+        }
+
+        .stat-card.negative {
+            border-left-color: #ef4444;
+        }
+
+        .stat-card.neutral {
+            border-left-color: #6366f1;
+        }
+
+        .stat-card h3 {
+            color: #374151;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .change {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .positive .value,
+        .positive .change {
+            color: #10b981;
+        }
+
+        .negative .value,
+        .negative .change {
+            color: #ef4444;
+        }
+
+        .neutral .value {
+            color: #6366f1;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-header {
+            background: #f8fafc;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-header h2 {
+            color: #1e293b;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-content {
+            padding: 25px;
+        }
+
+        .signal-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+            position: relative;
+        }
+
+        .signal-card.buy {
+            border-left-color: #10b981;
+        }
+
+        .signal-card.sell {
+            border-left-color: #ef4444;
+        }
+
+        .signal-card.urgent {
+            border-left-color: #dc2626;
+            background: linear-gradient(135deg, #fef2f2 0%, #fef2f2 100%);
+        }
+
+        .signal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .signal-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-badge {
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .action-badge.buy {
+            background: #10b981;
+        }
+
+        .action-badge.sell {
+            background: #ef4444;
+        }
+
+        .confidence-badge {
+            background: #6366f1;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .signal-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+
+        .signal-detail label {
+            color: #64748b;
+            display: block;
+            margin-bottom: 2px;
+            font-size: 0.8rem;
+        }
+
+        .signal-detail .value {
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .execution-status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .execution-status.executed {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .execution-status.not-executed {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+        .execution-status.pending {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #f59e0b;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .comparison-card {
+            text-align: center;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .comparison-card .label {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .comparison-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        .comparison-card .description {
+            color: #64748b;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        .instructions-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            margin: 50px auto;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #10b981;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .suggestion-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .suggestion-box h4 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+
+        .suggestion-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .suggestion-box li {
+            padding: 5px 0;
+            color: #1e40af;
+        }
+
+        .suggestion-box li:before {
+            content: "💡 ";
+            margin-right: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .signal-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> TRAD.IA</h1>
+            <p class="subtitle">Plataforma de Sinais e Análises - Você gerencia seu capital</p>
+            
+            <div class="capital-update">
+                <span>💰 Atualizar Capital:</span>
+                <input type="number" id="capitalInput" placeholder="61500" value="61500">
+                <button onclick="updateCapital()">Atualizar</button>
+                <span class="live-indicator">
+                    <span class="live-dot"></span>
+                    SINAIS ATIVOS
+                </span>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Estatísticas do Cliente -->
+            <div class="stats-grid">
+                <div class="stat-card positive">
+                    <h3><i class="fas fa-wallet"></i> Capital Atual</h3>
+                    <div class="value" id="currentCapital">R$ 61.500</div>
+                    <div class="change">+R$ 11.500 do inicial</div>
+                </div>
+                <div class="stat-card positive">
+                    <h3><i class="fas fa-percentage"></i> Seu Retorno</h3>
+                    <div class="value" id="clientReturn">+23.00%</div>
+                    <div class="change">Últimos 7 meses</div>
+                </div>
+                <div class="stat-card neutral">
+                    <h3><i class="fas fa-chart-line"></i> Plataforma</h3>
+                    <div class="value">+42.64%</div>
+                    <div class="change">Anualizado</div>
+                </div>
+                <div class="stat-card neutral">
+                    <h3><i class="fas fa-bullseye"></i> Taxa Adesão</h3>
+                    <div class="value">60%</div>
+                    <div class="change">3 de 5 sinais</div>
+                </div>
+                <div class="stat-card positive">
+                    <h3><i class="fas fa-trophy"></i> Acertos</h3>
+                    <div class="value">68.1%</div>
+                    <div class="change">Taxa da plataforma</div>
+                </div>
+                <div class="stat-card neutral">
+                    <h3><i class="fas fa-coins"></i> Corretora</h3>
+                    <div class="value">Rico</div>
+                    <div class="change">Integração ativa</div>
+                </div>
+            </div>
+
+            <!-- Sinais Atuais -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-broadcast-tower"></i> Sinais Ativos (5)</h2>
+                    <span class="live-indicator">
+                        <span class="live-dot"></span>
+                        AO VIVO
+                    </span>
+                </div>
+                <div class="section-content">
+                    <!-- Sinal 1 - SELL ITUB4 -->
+                    <div class="signal-card sell">
+                        <div class="signal-header">
+                            <div class="signal-title">
+                                <span class="action-badge sell">VENDER</span>
+                                <h3>ITUB4 - Take Profit</h3>
+                            </div>
+                            <span class="confidence-badge">85%</span>
+                        </div>
+                        
+                        <div class="signal-details">
+                            <div class="signal-detail">
+                                <label>Preço Atual</label>
+                                <div class="value">R$ 34,20</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Target</label>
+                                <div class="value">R$ 34,80</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Stop</label>
+                                <div class="value">R$ 33,50</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Valor Sugerido</label>
+                                <div class="value">R$ 2.153</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Prazo</label>
+                                <div class="value">1-2 dias</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Risco</label>
+                                <div class="value">Baixo</div>
+                            </div>
+                        </div>
+                        
+                        <p><strong>Análise:</strong> Ação atingiu resistência técnica forte. RSI em 78 (overbought). Recomenda-se realizar lucros.</p>
+                        
+                        <div class="execution-status executed">
+                            ✅ <strong>EXECUTADO:</strong> 60 ações vendidas a R$ 34,15 - Lucro: R$ 180
+                            <br><small>Observação: Executou parcialmente - vendeu 60 de 100 ações</small>
+                        </div>
+                    </div>
+
+                    <!-- Sinal 2 - BUY B3SA3 -->
+                    <div class="signal-card buy">
+                        <div class="signal-header">
+                            <div class="signal-title">
+                                <span class="action-badge buy">COMPRAR</span>
+                                <h3>B3SA3 - Gap Trading</h3>
+                            </div>
+                            <span class="confidence-badge">82%</span>
+                        </div>
+                        
+                        <div class="signal-details">
+                            <div class="signal-detail">
+                                <label>Preço Entrada</label>
+                                <div class="value">R$ 11,20</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Target</label>
+                                <div class="value">R$ 11,56</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Stop</label>
+                                <div class="value">R$ 10,95</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Valor Sugerido</label>
+                                <div class="value">R$ 2.460</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Prazo</label>
+                                <div class="value">1-3 dias</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Risco</label>
+                                <div class="value">Médio</div>
+                            </div>
+                        </div>
+                        
+                        <p><strong>Análise:</strong> Gap de -2.8% na abertura. Volume 3x acima da média. Estatisticamente 76% dos gaps fecham em 3 dias.</p>
+                        
+                        <div class="execution-status not-executed">
+                            ❌ <strong>NÃO EXECUTADO:</strong> Cliente optou por não seguir - gap muito pequeno
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="showInstructions('B3SA3', 'BUY')">
+                                <i class="fas fa-book"></i> Como Executar
+                            </button>
+                            <button class="btn btn-success" onclick="markAsExecuted('SIG_002')">
+                                <i class="fas fa-check"></i> Marcar como Executado
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sinal 3 - SELL WEGE3 (Urgent) -->
+                    <div class="signal-card urgent">
+                        <div class="signal-header">
+                            <div class="signal-title">
+                                <span class="action-badge sell">VENDER</span>
+                                <h3>WEGE3 - STOP LOSS 🚨</h3>
+                            </div>
+                            <span class="confidence-badge">95%</span>
+                        </div>
+                        
+                        <div class="signal-details">
+                            <div class="signal-detail">
+                                <label>Preço Atual</label>
+                                <div class="value">R$ 53,60</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Stop Loss</label>
+                                <div class="value">R$ 53,60</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Urgência</label>
+                                <div class="value">IMEDIATO</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Ação</label>
+                                <div class="value">Venda total</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Prazo</label>
+                                <div class="value">Agora</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Risco</label>
+                                <div class="value">Alto</div>
+                            </div>
+                        </div>
+                        
+                        <p><strong>⚠️ URGENTE:</strong> Rompeu suporte importante. Stop loss acionado para proteger capital.</p>
+                        
+                        <div class="execution-status executed">
+                            ✅ <strong>EXECUTADO:</strong> 180 ações vendidas a R$ 53,58 - Perda: R$ -108
+                            <br><small>Observação: Stop loss executado automaticamente</small>
+                        </div>
+                    </div>
+
+                    <!-- Sinal 4 - BUY PETR4 -->
+                    <div class="signal-card buy">
+                        <div class="signal-header">
+                            <div class="signal-title">
+                                <span class="action-badge buy">COMPRAR</span>
+                                <h3>PETR4 - Swing Trade</h3>
+                            </div>
+                            <span class="confidence-badge">78%</span>
+                        </div>
+                        
+                        <div class="signal-details">
+                            <div class="signal-detail">
+                                <label>Preço Entrada</label>
+                                <div class="value">R$ 38,90</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Target</label>
+                                <div class="value">R$ 41,20</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Stop</label>
+                                <div class="value">R$ 37,50</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Valor Sugerido</label>
+                                <div class="value">R$ 3.075</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Prazo</label>
+                                <div class="value">5-8 dias</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Risco</label>
+                                <div class="value">Médio</div>
+                            </div>
+                        </div>
+                        
+                        <p><strong>Análise:</strong> RSI em 25 (oversold) + MACD com divergência bullish. Suporte testado e confirmado.</p>
+                        
+                        <div class="execution-status executed">
+                            ✅ <strong>EXECUTADO:</strong> 120 ações compradas a R$ 38,95
+                            <br><small>Observação: Posição aberta - aguardando desenvolvimento</small>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="showInstructions('PETR4', 'BUY')">
+                                <i class="fas fa-book"></i> Ver Instruções
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sinal 5 - BUY ABEV3 -->
+                    <div class="signal-card buy">
+                        <div class="signal-header">
+                            <div class="signal-title">
+                                <span class="action-badge buy">COMPRAR</span>
+                                <h3>ABEV3 - Pairs Trading</h3>
+                            </div>
+                            <span class="confidence-badge">72%</span>
+                        </div>
+                        
+                        <div class="signal-details">
+                            <div class="signal-detail">
+                                <label>Preço Entrada</label>
+                                <div class="value">R$ 15,85</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Target</label>
+                                <div class="value">R$ 16,30</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Stop</label>
+                                <div class="value">R$ 15,45</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Valor Sugerido</label>
+                                <div class="value">R$ 1.845</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Prazo</label>
+                                <div class="value">7-12 dias</div>
+                            </div>
+                            <div class="signal-detail">
+                                <label>Risco</label>
+                                <div class="value">Baixo</div>
+                            </div>
+                        </div>
+                        
+                        <p><strong>Análise:</strong> Z-Score -2.4 vs COCA34. Correlação histórica 87%. Divergência temporária para reversão.</p>
+                        
+                        <div class="execution-status not-executed">
+                            ❌ <strong>NÃO EXECUTADO:</strong> Cliente não tinha cash disponível no momento
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="showInstructions('ABEV3', 'BUY')">
+                                <i class="fas fa-book"></i> Como Executar
+                            </button>
+                            <button class="btn btn-success" onclick="markAsExecuted('SIG_005')">
+                                <i class="fas fa-check"></i> Marcar como Executado
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparação de Performance -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-bar"></i> Comparação de Performance</h2>
+                </div>
+                <div class="section-content">
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <div class="label">Seu Retorno (30 dias)</div>
+                            <div class="value" style="color: #10b981;">2.50%</div>
+                            <div class="description">Capital próprio</div>
+                        </div>
+                        <div class="comparison-card">
+                            <div class="label">Retorno da Plataforma</div>
+                            <div class="value" style="color: #3b82f6;">3.80%</div>
+                            <div class="description">Se seguisse 100%</div>
+                        </div>
+                        <div class="comparison-card">
+                            <div class="label">Taxa de Adesão</div>
+                            <div class="value" style="color: #f59e0b;">60%</div>
+                            <div class="description">3 de 5 sinais</div>
+                        </div>
+                        <div class="comparison-card">
+                            <div class="label">Seu Acerto</div>
+                            <div class="value" style="color: #10b981;">50.0%</div>
+                            <div class="description">1 de 2 trades</div>
+                        </div>
+                        <div class="comparison-card">
+                            <div class="label">Lucro Realizado</div>
+                            <div class="value" style="color: #10b981;">R$ 1.537</div>
+                            <div class="description">Trades executados</div>
+                        </div>
+                        <div class="comparison-card">
+                            <div class="label">Potencial Perdido</div>
+                            <div class="value" style="color: #ef4444;">R$ 803</div>
+                            <div class="description">Sinais não seguidos</div>
+                        </div>
+                    </div>
+                    
+                    <div class="suggestion-box">
+                        <h4><i class="fas fa-lightbulb"></i> Sugestões para Melhorar Performance:</h4>
+                        <ul>
+                            <li>Considere seguir mais sinais da plataforma para melhorar resultados</li>
+                            <li>Revise seus critérios de entrada e saída</li>
+                            <li>Considere seguir mais rigorosamente os stops sugeridos</li>
+                            <li>Aumente a adesão aos sinais de alta confiança (>80%)</li>
+                            <li>Evite alterar muito os preços de entrada sugeridos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Como Usar -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-question-circle"></i> Como Usar a Plataforma</h2>
+                </div>
+                <div class="section-content">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 12px;">
+                            <h4>1. 📊 Receba Sinais</h4>
+                            <p>Sinais em tempo real via WhatsApp, email e nesta plataforma</p>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 12px;">
+                            <h4>2. 📈 Analise</h4>
+                            <p>Veja análise completa, valor sugerido e nível de confiança</p>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 12px;">
+                            <h4>3. 💰 Execute</h4>
+                            <p>Execute na sua corretora seguindo as instruções</p>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 12px;">
+                            <h4>4. 📝 Confirme</h4>
+                            <p>Marque como executado e atualize seu capital</p>
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 12px;">
+                            <h4>5. 📊 Acompanhe</h4>
+                            <p>Compare sua performance com a plataforma</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Instruções -->
+    <div id="instructionsModal" class="instructions-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Instruções de Execução</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody">
+                <!-- Conteúdo será inserido via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Atualizar capital
+        function updateCapital() {
+            const newCapital = document.getElementById('capitalInput').value;
+            document.getElementById('currentCapital').textContent = 'R$ ' + parseInt(newCapital).toLocaleString('pt-BR');
+            
+            const initialCapital = 50000;
+            const returnPercent = ((newCapital - initialCapital) / initialCapital * 100).toFixed(2);
+            document.getElementById('clientReturn').textContent = '+' + returnPercent + '%';
+            
+            alert('Capital atualizado com sucesso! 💰');
+        }
+
+        // Mostrar instruções
+        function showInstructions(symbol, action) {
+            const modal = document.getElementById('instructionsModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            title.textContent = `Como ${action === 'BUY' ? 'Comprar' : 'Vender'} ${symbol}`;
+            
+            let instructions = `
+                <div style="background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4>${action === 'BUY' ? '🟢 COMPRAR' : '🔴 VENDER'} ${symbol}</h4>
+                    <p><strong>Estratégia:</strong> ${getStrategyBySymbol(symbol)}</p>
+                </div>
+                
+                <h4>📋 Passos na Corretora Rico:</h4>
+                <ol style="padding-left: 20px; line-height: 1.8;">
+                    <li>Acesse o home broker da Rico</li>
+                    <li>Busque por "${symbol}" na barra de pesquisa</li>
+                    <li>Clique em "${action === 'BUY' ? 'Comprar' : 'Vender'}"</li>
+                    <li>Insira a quantidade sugerida</li>
+                    <li>Selecione tipo "À mercado" ou "Por quantidade"</li>
+                    <li>Confirme a operação</li>
+                </ol>
+                
+                <div style="background: #eff6ff; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #1e40af;">🎯 Gestão da Posição:</h4>
+                    <p style="color: #1e40af;">• Configure stop loss conforme indicado<br>
+                    • Monitore o target price<br>
+                    • Acompanhe o prazo estimado</p>
+                </div>
+                
+                <div style="background: #fef3c7; padding: 15px; border-radius: 8px;">
+                    <h4 style="color: #92400e;">📝 Importante:</h4>
+                    <p style="color: #92400e;">• Marque como executado após a compra<br>
+                    • Anote preço e quantidade exatos<br>
+                    • Atualize seu capital quando vender</p>
+                </div>
+            `;
+            
+            body.innerHTML = instructions;
+            modal.style.display = 'block';
+        }
+
+        function getStrategyBySymbol(symbol) {
+            const strategies = {
+                'B3SA3': 'Gap Trading',
+                'PETR4': 'Swing Trade',
+                'ABEV3': 'Pairs Trading',
+                'ITUB4': 'Take Profit',
+                'WEGE3': 'Stop Loss'
+            };
+            return strategies[symbol] || 'Trading';
+        }
+
+        // Fechar modal
+        function closeModal() {
+            document.getElementById('instructionsModal').style.display = 'none';
+        }
+
+        // Marcar como executado
+        function markAsExecuted(signalId) {
+            const price = prompt('Digite o preço de execução:');
+            const quantity = prompt('Digite a quantidade:');
+            
+            if (price && quantity) {
+                alert(`✅ Operação marcada como executada!\nPreço: R$ ${price}\nQuantidade: ${quantity} ações`);
+                // Aqui seria enviado para o backend
+            }
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('instructionsModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Efeito de loading
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.stat-card, .signal-card, .section');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Atualização automática do indicador live
+        setInterval(() => {
+            const dots = document.querySelectorAll('.live-dot');
+            dots.forEach(dot => {
+                dot.style.opacity = '0.5';
+                setTimeout(() => {
+                    dot.style.opacity = '1';
+                }, 500);
+            });
+        }, 3000);
+    </script>
+</body>
+</html>
