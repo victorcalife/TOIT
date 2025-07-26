@@ -1,0 +1,65 @@
+{
+  "name": "tradia-platform",
+  "version": "1.0.0",
+  "description": "TRADia - Trading Intelligence Platform with AI Signals",
+  "main": "backend/src/index.ts",
+  "private": true,
+  "workspaces": [
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:ai\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "echo 'Frontend is static HTML files - open frontend/*.html in browser'",
+    "dev:ai": "cd backend/ai-engine && python main.py",
+    "build": "npm run build:backend",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "echo 'Frontend is static HTML files - no build needed'",
+    "start": "cd backend && npm start",
+    "test": "npm run test:backend",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "echo 'No tests for static frontend'",
+    "lint": "npm run lint:backend",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:frontend": "echo 'No linting for static frontend'",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "db:migrate": "cd backend && npm run db:migrate",
+    "db:seed": "cd backend && npm run db:seed",
+    "deploy:dev": "railway up --service tradia-dev",
+    "deploy:test": "railway up --service tradia-test",
+    "deploy:prod": "railway up --service tradia-prod"
+  },
+  "keywords": [
+    "trading",
+    "ai",
+    "signals",
+    "finance",
+    "stocks",
+    "bovespa",
+    "brazil"
+  ],
+  "author": "TOIT Systems",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "concurrently": "^8.2.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/victorcalife/TRADia.git"
+  },
+  "bugs": {
+    "url": "https://github.com/victorcalife/TRADia/issues"
+  },
+  "homepage": "https://github.com/victorcalife/TRADia#readme",
+  "dependencies": {
+    "node.js": "^0.0.1-security"
+  }
+}

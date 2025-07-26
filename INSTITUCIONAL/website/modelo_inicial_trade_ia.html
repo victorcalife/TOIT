@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAD.IA - Trading Inteligente | Informaçoes de IA para sua decisão</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #dc2626;
+            --dark: #111827;
+            --light: #f3f4f6;
+            --gradient: linear-gradient(135deg, #7c3aed 0%, #10b981 100%);
+            --gradient-premium: linear-gradient(45deg, #7c3aed 0%, #f59e0b 50%, #10b981 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-diamond {
+            font-size: 20px;
+            line-height: 0.6;
+            text-align: center;
+            background: linear-gradient(135deg, #7C3AED 0%, #10B981 100%);
+            background-clip: text; /* compatibilidade padrão */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            50% { 
+                transform: scale(1.05);
+                filter: brightness(1.2);
+            }
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.75rem;
+            color: #1f2937;
+            letter-spacing: -1px;
+        }
+
+        .logo-text .ia {
+            font-style: italic;
+            background: linear-gradient(90deg, #7C3AED 0%, #10B981 100%);
+            background-clip: text; /* compatibilidade padrão */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .cta-button {
+            background: var(--gradient);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '◆';
+            position: absolute;
+            top: 10%;
+            right: 10%;
+            font-size: 150px;
+            opacity: 0.05;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '◆';
+            position: absolute;
+            bottom: 10%;
+            left: 10%;
+            font-size: 200px;
+            opacity: 0.03;
+            animation: float 12s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient);
+            background-clip: text; /* compatibilidade padrão */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: #6b7280;
+        }
+
+        /* Products Section */
+        .products {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .product-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .product-price {
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .product-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-features li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .product-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Suite Card */
+        .suite-card {
+            grid-column: 1 / -1;
+            background: var(--gradient);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .suite-card::before {
+            display: none;
+        }
+
+        .suite-card .product-name,
+        .suite-card .product-price {
+            color: white;
+        }
+
+        .suite-card .product-features li::before {
+            color: #34d399;
+        }
+
+        .suite-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        /* Features Section */
+        .features {
+            background: #f9fafb;
+            padding: 4rem 2rem;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .feature p {
+            color: #6b7280;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 4rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: #4b5563;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .testimonial-role {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--gradient);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button-white {
+            background: white;
+            color: var(--primary);
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.125rem;
+            display: inline-block;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            color: #9ca3af;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.25rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Modal de Checkout */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-close {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .submit-button {
+            width: 100%;
+            background: var(--gradient);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .price-summary {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .price-summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-summary-total {
+            font-weight: bold;
+            font-size: 1.25rem;
+            color: var(--primary);
+            border-top: 2px solid #e5e7eb;
+            padding-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <div class="logo-diamond">◆</div>
+                <div class="logo-text">TRAD<span class="ia">.IA</span></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#produtos">Produtos</a></li>
+                <li><a href="#recursos">Recursos</a></li>
+                <li><a href="#depoimentos">Depoimentos</a></li>
+                <li><a href="#precos">Preços</a></li>
+            </ul>
+            <a href="#assinar" class="cta-button">Começar Agora</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div style="display: inline-flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+            <div style="font-size: 48px; line-height: 0.6; background: linear-gradient(135deg, #7C3AED 0%, #10B981 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">◆</div>
+            <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 4rem; color: #1f2937;">TRAD<span style="font-style: italic; background: linear-gradient(90deg, #7C3AED 0%, #10B981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">.IA</span></h1>
+        </div>
+        <h2 style="font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, #7C3AED 0%, #10B981 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">DURMA TRANQUILO</h2>
+        <p>A única plataforma que recomenda <strong>NÃO</strong> operar day trade. Swing Trade e Long Shot com 85% de acerto enquanto você vive sua vida.</p>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-number">65%</div>
+                <div class="stat-label">Taxa de Acerto Swing</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">3 anos</div>
+                <div class="stat-label">No Mercado</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">R$10M+</div>
+                <div class="stat-label">Gerenciados</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Warning Section -->
+    <section style="background: #fef2f2; padding: 3rem 2rem; margin-bottom: 2rem;">
+        <div style="max-width: 900px; margin: 0 auto;">
+            <h2 style="color: #991b1b; margin-bottom: 1.5rem; text-align: center; font-size: 2.5rem;">
+                🎰 Day Trade vs. Cassino: Qual é Pior?
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                <div style="background: white; padding: 1.5rem; border-radius: 1rem; border: 2px solid #dc2626;">
+                    <h3 style="color: #991b1b; margin-bottom: 1rem;">📉 Day Trade - Os Números do Terror</h3>
+                    <ul style="color: #7f1d1d; line-height: 1.8; list-style: none; padding: 0;">
+                        <li>💸 <strong>-27% ao ano</strong> com R$ 10k</li>
+                        <li>🥱 <strong>+0.16% ao ano</strong> com R$ 100k<br>
+                            <span style="font-size: 0.875rem;">(A poupança ri da sua cara)</span></li>
+                        <li>🏃‍♂️ <strong>90% desistem</strong> no primeiro ano</li>
+                        <li>💊 <strong>100% precisam</strong> de Rivotril</li>
+                        <li>👨‍⚕️ <strong>Cardiologista</strong> no speed dial</li>
+                        <li>☕ <strong>R$ 5.000/ano</strong> em café para ficar acordado</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #d1fae5; padding: 1.5rem; border-radius: 1rem; border: 2px solid #10b981;">
+                    <h3 style="color: #065f46; margin-bottom: 1rem;">📈 Swing/Long Shot - A Vida Boa</h3>
+                    <ul style="color: #064e3b; line-height: 1.8; list-style: none; padding: 0;">
+                        <li>🎯 <strong>+43% ao ano</strong> no Swing Trade</li>
+                        <li>💎 <strong>85% de acerto</strong> no Long Shot</li>
+                        <li>😴 <strong>Dorme tranquilo</strong> à noite</li>
+                        <li>🏖️ <strong>Opera da praia</strong> (sério!)</li>
+                        <li>👨‍👩‍👧 <strong>Tem vida social</strong> (família agradece)</li>
+                        <li>🧘 <strong>Zen total</strong> (Namastê, lucros!)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="text-align: center; padding: 2rem; background: #fbbf24; border-radius: 1rem; margin-top: 2rem;">
+                <p style="font-size: 1.5rem; font-weight: bold; color: #78350f; margin-bottom: 1rem;">
+                    🤔 Matemática Simples do Day Trader
+                </p>
+                <p style="font-size: 1.125rem; color: #92400e; line-height: 1.8;">
+                    Você paga R$ 500/mês para perder R$ 2.700/ano<br>
+                    <span style="font-size: 1.25rem; font-weight: bold;">
+                        Total: -R$ 8.700 (perda + mensalidade) 🤡
+                    </span><br><br>
+                    <span style="font-size: 0.875rem;">
+                        *Não incluímos o custo do psicólogo
+                    </span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="produtos">
+        <h2 class="section-title">Escolha Sua Estratégia</h2>
+        <div class="products-grid">
+            <!-- Monitor Day Trade -->
+            <div class="product-card" style="opacity: 0.7; border: 3px dashed #dc2626; background: #fef2f2;">
+                <div class="product-icon">🤕</div>
+                <h3 class="product-name">Monitor Day Trade</h3>
+                <div class="product-price" style="color: #dc2626; text-decoration: line-through;">R$ 500/mês</div>
+                <div style="background: #dc2626; color: white; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 1rem; transform: rotate(-2deg);">
+                    <p style="font-size: 0.875rem; font-weight: 600; margin: 0;">
+                        🎪 PROMOÇÃO: Ganhe sessões grátis com psicólogo!
+                    </p>
+                </div>
+                <ul class="product-features" style="text-decoration: line-through; opacity: 0.7;">
+                    <li>Perca dinheiro profissionalmente</li>
+                    <li>Fique acordado até 3h da manhã</li>
+                    <li>Desenvolva úlcera gástrica</li>
+                    <li>Brigue com a família</li>
+                    <li>Culpe o "mercado manipulado"</li>
+                </ul>
+                <div style="margin: 1rem 0; padding: 1rem; background: #fbbf24; border-radius: 0.5rem;">
+                    <p style="color: #78350f; font-weight: bold; margin: 0; font-size: 0.875rem;">
+                        💡 Dica: Use os R$ 500 para fazer terapia. É mais barato e menos traumático.
+                    </p>
+                </div>
+                <button class="cta-button" style="width: 100%; background: #6b7280;" disabled>
+                    Temporariamente Suspenso<br>
+                    <span style="font-size: 0.75rem;">(Para o seu próprio bem)</span>
+                </button>
+            </div>
+
+            <!-- Monitor Swing Trade -->
+            <div class="product-card" style="border: 2px solid #10b981; background: #f0fdf4;">
+                <div class="product-icon">📈</div>
+                <h3 class="product-name">Monitor Swing Trade</h3>
+                <div class="product-price" style="color: #10b981;">R$ 50/mês</div>
+                <div style="background: #10b981; color: white; padding: 0.3rem 0.5rem; border-radius: 0.3rem; font-size: 0.75rem; margin-bottom: 1rem; display: inline-block;">
+                    ✨ A ESCOLHA INTELIGENTE
+                </div>
+                <ul class="product-features">
+                    <li>📊 +43% de retorno médio anual</li>
+                    <li>😌 Opera só 2-3x por mês</li>
+                    <li>🏖️ Tempo livre para viver</li>
+                    <li>💚 Sua esposa(o) vai te amar</li>
+                    <li>🧠 Decisões calmas e racionais</li>
+                </ul>
+                <button class="cta-button" style="width: 100%; background: #10b981;" onclick="openCheckout('Monitor Swing Trade', 50)">
+                    Quero Ter Vida!
+                </button>
+            </div>
+
+            <!-- Long Shot -->
+            <div class="product-card" style="border: 2px solid #7c3aed; background: #faf5ff;">
+                <div class="product-icon">💎</div>
+                <h3 class="product-name">Long Shot</h3>
+                <div class="product-price" style="color: #7c3aed;">R$ 70/mês</div>
+                <div style="background: #7c3aed; color: white; padding: 0.3rem 0.5rem; border-radius: 0.3rem; font-size: 0.75rem; margin-bottom: 1rem; display: inline-block;">
+                    🎯 PARA QUEM GOSTA DE ACERTAR
+                </div>
+                <ul class="product-features">
+                    <li>🎯 85% de taxa de acerto</li>
+                    <li>💰 Pega as "balas de prata"</li>
+                    <li>📈 WEGE3 a R$ 28? Pegamos!</li>
+                    <li>🔮 Análise tipo "insider" (legal)</li>
+                    <li>🏆 Se gaba no churrasco</li>
+                </ul>
+                <button class="cta-button" style="width: 100%; background: #7c3aed;" onclick="openCheckout('Long Shot', 70)">
+                    Quero Acertar Também!
+                </button>
+            </div>
+
+            <!-- TOIT Smart Suite -->
+            <div class="product-card suite-card">
+                <div class="suite-badge">RECOMENDADO</div>
+                <div class="product-icon">🎯</div>
+                <h3 class="product-name">TOIT Smart Suite</h3>
+                <div class="product-price">R$ 99/mês</div>
+                <ul class="product-features">
+                    <li>Swing Trade + Long Shot</li>
+                    <li>As estratégias que funcionam</li>
+                    <li>Dashboard unificado</li>
+                    <li>Análise multi-timeframe</li>
+                    <li>Suporte prioritário</li>
+                    <li>21% de economia</li>
+                </ul>
+                <button class="cta-button-white" style="width: 100%;" onclick="openCheckout('TOIT Smart Suite', 99)">
+                    Escolha Inteligente
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Math Section -->
+    <section style="background: #e0e7ff; padding: 3rem 2rem;">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <h2 style="font-size: 2rem; margin-bottom: 2rem; color: #312e81;">
+                🧮 A Matemática da Felicidade Financeira
+            </h2>
+            
+            <div style="display: grid; gap: 1.5rem;">
+                <!-- Day Trade Math -->
+                <div style="background: #fee2e2; padding: 1.5rem; border-radius: 1rem; text-align: left;">
+                    <h3 style="color: #991b1b; margin-bottom: 1rem;">❌ Conta do Day Trader:</h3>
+                    <p style="font-size: 1.125rem; line-height: 1.8; color: #7f1d1d;">
+                        Capital: R$ 50.000<br>
+                        Perda anual: -27% = <strong>-R$ 13.500</strong><br>
+                        Mensalidade: R$ 500 × 12 = <strong>-R$ 6.000</strong><br>
+                        Remédios p/ ansiedade: <strong>-R$ 2.400</strong><br>
+                        <span style="font-size: 1.25rem; font-weight: bold; color: #dc2626;">
+                            Total: -R$ 21.900 😭
+                        </span>
+                    </p>
+                </div>
+                
+                <!-- Swing Trade Math -->
+                <div style="background: #d1fae5; padding: 1.5rem; border-radius: 1rem; text-align: left;">
+                    <h3 style="color: #065f46; margin-bottom: 1rem;">✅ Conta do Swing Trader:</h3>
+                    <p style="font-size: 1.125rem; line-height: 1.8; color: #064e3b;">
+                        Capital: R$ 50.000<br>
+                        Lucro anual: +43% = <strong>+R$ 21.500</strong><br>
+                        Mensalidade: R$ 50 × 12 = <strong>-R$ 600</strong><br>
+                        Economia com remédios: <strong>+R$ 0</strong><br>
+                        <span style="font-size: 1.25rem; font-weight: bold; color: #10b981;">
+                            Total: +R$ 20.900 🎉
+                        </span>
+                    </p>
+                </div>
+                
+                <!-- Comparison -->
+                <div style="background: #fbbf24; padding: 1.5rem; border-radius: 1rem;">
+                    <p style="font-size: 1.5rem; font-weight: bold; color: #78350f; margin: 0;">
+                        Diferença: R$ 42.800 por ano! 🤯
+                    </p>
+                    <p style="color: #92400e; margin-top: 0.5rem;">
+                        Com essa diferença você compra um carro zero<br>
+                        (e ainda sobra para a gasolina)
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="recursos">
+        <h2 class="section-title">Por Que Escolher TOIT Trading?</h2>
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon">🤖</div>
+                <h3>Inteligência Artificial</h3>
+                <p>Algoritmos avançados analisam milhares de ativos em tempo real para encontrar as melhores oportunidades</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Alertas Instantâneos</h3>
+                <p>Receba notificações no momento exato de entrada e saída, com todos os parâmetros calculados</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>Gestão de Risco</h3>
+                <p>Sistema automático de cálculo de position size, stop loss e alvos baseado no seu capital</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📱</div>
+                <h3>Acesso Total</h3>
+                <p>Funciona em qualquer dispositivo - computador, tablet ou celular, sempre sincronizado</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>Relatórios Detalhados</h3>
+                <p>Acompanhe sua evolução com métricas profissionais e análise de performance</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎓</div>
+                <h3>Suporte Especializado</h3>
+                <p>Time de traders experientes disponível para tirar dúvidas e ajudar na sua jornada</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="depoimentos">
+        <h2 class="section-title">O Que Nossos Traders Dizem</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial">
+                <p class="testimonial-text">"Perdi muito no day trade antes de entender que precisava de método. O TOIT não promete milagres, mas entrega disciplina e gestão de risco."</p>
+                <div class="testimonial-author">Carlos Eduardo</div>
+                <div class="testimonial-role">Trader há 5 anos</div>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"A gestão de capital automática salvou minha conta. Nunca mais operei sem calcular o tamanho correto da posição."</p>
+                <div class="testimonial-author">Maria Silva</div>
+                <div class="testimonial-role">Day Trader profissional</div>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"O Suite vale cada centavo. Ter as 3 estratégias integradas mudou completamente minha forma de operar."</p>
+                <div class="testimonial-author">João Santos</div>
+                <div class="testimonial-role">Investidor e trader</div>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"O Day Trade é difícil, mas com a gestão de risco do TOIT consigo operar sem explodir a conta. O importante é sobreviver primeiro, lucrar depois."</p>
+                <div class="testimonial-author">Ana Beatriz</div>
+                <div class="testimonial-role">Day trader disciplinada</div>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"O Swing Trade mudou minha vida. Trabalho em tempo integral e consigo operar sem ficar na frente do computador. +R$18k em 3 meses!"</p>
+                <div class="testimonial-author">Roberto Mendes</div>
+                <div class="testimonial-role">Empresário e swing trader</div>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"Sou assinante desde o início. O suporte é fantástico e as análises do Long Shot são cirúrgicas. Peguei WEGE3 a R$28 e ainda estou comprado!"</p>
+                <div class="testimonial-author">Patricia Oliveira</div>
+                <div class="testimonial-role">Investidora experiente</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="assinar">
+        <div style="font-size: 64px; margin-bottom: 1rem; animation: pulse 3s ease-in-out infinite;">◆</div>
+        <h2>Comece a Lucrar Dormindo</h2>
+        <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">Day Trade Não. Lucro Sim.</p>
+        <p>Junte-se aos traders inteligentes que ganham dinheiro de verdade</p>
+        <a href="#produtos" class="cta-button-white">Escolher Meu Plano Inteligente</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="#">Termos de Uso</a></li>
+                <li><a href="#">Política de Privacidade</a></li>
+                <li><a href="#">Suporte</a></li>
+                <li><a href="#">FAQ</a></li>
+            </ul>
+            <div style="margin-bottom: 2rem;">
+                <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 24px; background: linear-gradient(135deg, #7C3AED 0%, #10B981 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">◆</span>
+                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.5rem; color: white;">TRAD<span style="font-style: italic;">.IA</span></span>
+                </div>
+                <p style="margin-top: 0.5rem; color: #9ca3af; font-size: 0.875rem; letter-spacing: 2px;">LUCRE DORMINDO</p>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TRAD.IA - Uma solução TOIT. Todos os direitos reservados.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    <strong>AVISO IMPORTANTE:</strong> Day trade é uma modalidade de alto risco onde 90% dos traders perdem dinheiro. 
+                    Nossos sistemas focam em gestão de risco e preservação de capital, não em promessas de enriquecimento rápido. 
+                    Opere apenas com capital que pode perder. Resultados passados não garantem resultados futuros.
+                </p>
+                <p style="margin-top: 1rem; font-size: 1rem; color: #10b981;">
+                    <strong>PS:</strong> Se você ainda quer fazer day trade depois de ler tudo isso... 
+                    pelo menos use nosso cupom <strong>TERAPIA50</strong> para 50% de desconto no primeiro mês. 
+                    (Válido apenas para corajosos/teimosos) 🙃
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal de Checkout -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Finalizar Assinatura</h2>
+                <span class="modal-close" onclick="closeCheckout()">&times;</span>
+            </div>
+            
+            <div class="price-summary">
+                <div class="price-summary-row">
+                    <span>Produto:</span>
+                    <span id="selectedProduct">-</span>
+                </div>
+                <div class="price-summary-row price-summary-total">
+                    <span>Total Mensal:</span>
+                    <span id="selectedPrice">-</span>
+                </div>
+            </div>
+
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label for="name">Nome Completo</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">WhatsApp</label>
+                    <input type="tel" id="phone" name="phone" placeholder="(11) 99999-9999" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="capital">Capital para Trading</label>
+                    <select id="capital" name="capital" required>
+                        <option value="">Selecione...</option>
+                        <option value="10k">Até R$ 10.000</option>
+                        <option value="50k">R$ 10.000 - R$ 50.000</option>
+                        <option value="100k">R$ 50.000 - R$ 100.000</option>
+                        <option value="250k">R$ 100.000 - R$ 250.000</option>
+                        <option value="500k">R$ 250.000 - R$ 500.000</option>
+                        <option value="1m">Acima de R$ 500.000</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="experience">Experiência em Trading</label>
+                    <select id="experience" name="experience" required>
+                        <option value="">Selecione...</option>
+                        <option value="iniciante">Iniciante (menos de 1 ano)</option>
+                        <option value="intermediario">Intermediário (1-3 anos)</option>
+                        <option value="avancado">Avançado (3-5 anos)</option>
+                        <option value="profissional">Profissional (mais de 5 anos)</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="submit-button">Continuar para Pagamento</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Modal functions
+        function openCheckout(product, price) {
+            document.getElementById('selectedProduct').textContent = product;
+            document.getElementById('selectedPrice').textContent = `R$ ${price},00`;
+            document.getElementById('checkoutModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('checkoutForm').reset();
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('checkoutModal');
+            if (event.target == modal) {
+                closeCheckout();
+            }
+        }
+
+        // Form submission
+        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                product: document.getElementById('selectedProduct').textContent,
+                price: document.getElementById('selectedPrice').textContent,
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                capital: document.getElementById('capital').value,
+                experience: document.getElementById('experience').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Aqui você integraria com seu sistema de pagamento
+            console.log('Dados do checkout:', formData);
+            
+            // Simulação de sucesso
+            alert('Obrigado! Você será redirecionado para o pagamento seguro.');
+            closeCheckout();
+            
+            // Redirecionar para gateway de pagamento
+            // window.location.href = 'https://pagamento.exemplo.com';
+        });
+
+        // Phone mask
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            
+            if (value.length > 6) {
+                value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
+            } else if (value.length > 2) {
+                value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+            } else if (value.length > 0) {
+                value = `(${value}`;
+            }
+            
+            e.target.value = value;
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+            } else {
+                header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            }
+        });
+    </script>
+</body>
+</html>

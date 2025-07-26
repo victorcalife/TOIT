@@ -1,0 +1,198 @@
+name: TRADia CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, test, dev ]
+  pull_request:
+    branches: [ main, test ]
+
+env:
+  NODE_VERSION: '18.x'
+
+jobs:
+  # ================================
+  # QUALITY CHECKS
+  # ================================
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies (all workspaces)
+        run: npm install
+
+      - name: Lint backend
+        run: npm run lint:backend
+
+      - name: Lint frontend
+        run: npm run lint:frontend
+
+      - name: Type check backend
+        run: cd backend && npx tsc --noEmit
+
+      - name: Type check frontend
+        run: cd frontend && npx tsc --noEmit
+
+  # ================================
+  # TESTS
+  # ================================
+  test:
+    runs-on: ubuntu-latest
+    needs: quality
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: tradia_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies (all workspaces)
+        run: npm install
+
+      - name: Run backend tests
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/tradia_test
+          REDIS_URL: redis://localhost:6379
+          NODE_ENV: test
+        run: npm run test:backend
+
+      - name: Run frontend tests
+        run: npm run test:frontend
+
+  # ================================
+  # BUILD
+  # ================================
+  build:
+    runs-on: ubuntu-latest
+    needs: [quality, test]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies (all workspaces)
+        run: npm install
+
+      - name: Build frontend
+        run: npm run build:frontend
+
+      - name: Build backend
+        run: npm run build:backend
+
+      - name: Archive backend build
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-dist
+          path: backend/dist/
+          retention-days: 7
+
+      - name: Archive frontend build
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-build
+          path: frontend/build/
+          retention-days: 7
+
+  # ================================
+  # DEPLOY TO RAILWAY (DEV/TEST/MAIN)
+  # ================================
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/test' || github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download backend build
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-dist
+          path: backend/dist
+
+      - name: Download frontend build
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-build
+          path: frontend/build
+
+      - name: Install Railway CLI
+        run: npm install -g railway
+
+      - name: Deploy to Railway (Production)
+        if: github.ref == 'refs/heads/main'
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_PROD }}
+        run: |
+          railway up --service tradia-prod
+
+      - name: Deploy to Railway (Testing)
+        if: github.ref == 'refs/heads/test'
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_TEST }}
+        run: |
+          railway up --service tradia-test
+
+      - name: Deploy to Railway (Development)
+        if: github.ref == 'refs/heads/dev'
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_DEV }}
+        run: |
+          railway up --service tradia-dev
+
+      - name: Health check
+        run: |
+          sleep 30
+          curl -f ${{ github.ref == 'refs/heads/main' && 'https://tradia.up.railway.app/health' || (github.ref == 'refs/heads/test' && 'https://tradia-test.up.railway.app/health' || 'https://tradia-dev.up.railway.app/health') }} || exit 1
+
+      - name: Notify deployment
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          channel: '#tradia-deployments'
+          text: >-
+            ${{ github.ref == 'refs/heads/main' && '🎉 TRADia deployed to Production!' || (github.ref == 'refs/heads/test' && '🧪 TRADia deployed to Testing environment' || '🚀 TRADia deployed to Development environment') }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

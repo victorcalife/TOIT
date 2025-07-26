@@ -1,0 +1,263 @@
+# GitHub Actions CI/CD - TOIT Enterprise Platform
+name: 🚀 Deploy to Railway DEV
+
+on:
+  push:
+    branches: [ main, dev ]
+    paths:
+      - 'SISTEMAS/**'
+      - 'PACKAGES/**'  
+      - 'SERVICES/**'
+      - 'package.json'
+      - 'turbo.json'
+      - 'railway.toml'
+  pull_request:
+    branches: [ main ]
+    
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      service:
+        description: 'Service to deploy (all, portal, oms, tradia)'
+        required: false
+        default: 'all'
+      environment:
+        description: 'Environment (dev, staging, prod)'
+        required: false
+        default: 'dev'
+
+env:
+  NODE_VERSION: '18'
+  RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+jobs:
+  # === DETECT CHANGES ===
+  detect-changes:
+    name: 🔍 Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      portal-changed: ${{ steps.changes.outputs.portal }}
+      oms-changed: ${{ steps.changes.outputs.oms }}
+      tradia-changed: ${{ steps.changes.outputs.tradia }}
+      packages-changed: ${{ steps.changes.outputs.packages }}
+      should-deploy-all: ${{ steps.changes.outputs.should-deploy-all }}
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          
+      - name: 🔍 Check for changes
+        id: changes
+        run: |
+          # Check if core files changed (requires full deploy)
+          if git diff --name-only HEAD^ HEAD | grep -E "(package\.json|turbo\.json|railway\.toml|\.github/)"; then
+            echo "should-deploy-all=true" >> $GITHUB_OUTPUT
+            echo "portal-changed=true" >> $GITHUB_OUTPUT
+            echo "oms-changed=true" >> $GITHUB_OUTPUT
+            echo "tradia-changed=true" >> $GITHUB_OUTPUT
+            echo "packages-changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "should-deploy-all=false" >> $GITHUB_OUTPUT
+            
+            # Check specific services
+            echo "portal-changed=$(git diff --name-only HEAD^ HEAD | grep -q 'SISTEMAS/portal-toit' && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+            echo "oms-changed=$(git diff --name-only HEAD^ HEAD | grep -q 'SISTEMAS/oms-blueworld' && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+            echo "tradia-changed=$(git diff --name-only HEAD^ HEAD | grep -q 'SISTEMAS/tradia' && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+            echo "packages-changed=$(git diff --name-only HEAD^ HEAD | grep -q 'PACKAGES/' && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+          fi
+
+  # === BUILD & TEST ===
+  build-and-test:
+    name: 🏗️ Build & Test
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.should-deploy-all == 'true' || needs.detect-changes.outputs.portal-changed == 'true' || needs.detect-changes.outputs.oms-changed == 'true' || needs.detect-changes.outputs.tradia-changed == 'true'
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📦 Install Dependencies
+        run: npm ci
+        
+      - name: 📦 Build Packages (if changed)
+        if: needs.detect-changes.outputs.packages-changed == 'true'
+        run: |
+          npm run build --filter=./PACKAGES/*
+          
+      - name: 🏗️ Build Portal TOIT
+        if: needs.detect-changes.outputs.portal-changed == 'true'
+        run: npm run build --filter=portal-toit
+        
+      - name: 🏗️ Build OMS Blue World  
+        if: needs.detect-changes.outputs.oms-changed == 'true'
+        run: npm run build --filter=oms-blueworld
+        
+      - name: 🏗️ Build Tradia
+        if: needs.detect-changes.outputs.tradia-changed == 'true'
+        run: npm run build --filter=tradia
+        
+      - name: 🧪 Run Tests
+        run: npm run test --filter=./SISTEMAS/*
+        env:
+          NODE_ENV: test
+          
+      - name: 🔍 Lint
+        run: npm run lint --filter=./SISTEMAS/*
+        
+      - name: 📋 Type Check
+        run: |
+          cd SISTEMAS/portal-toit/backend && npm run build
+          cd ../../oms-blueworld && npm run build
+          cd ../tradia/backend && npm run build
+
+  # === DEPLOY PORTAL TOIT (SSO Gateway) ===
+  deploy-portal:
+    name: 🚀 Deploy Portal TOIT
+    runs-on: ubuntu-latest
+    needs: [detect-changes, build-and-test]
+    if: needs.detect-changes.outputs.portal-changed == 'true' || needs.detect-changes.outputs.should-deploy-all == 'true'
+    environment: 
+      name: dev
+      url: https://portal-toit-dev.up.railway.app
+      
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        
+      - name: 🚀 Deploy to Railway
+        uses: railwayapp/railway-deploy@v3
+        with:
+          service: 'portal-toit'
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          
+      - name: ✅ Health Check
+        run: |
+          sleep 30
+          curl -f https://portal-toit-dev.up.railway.app/health || exit 1
+          
+  # === DEPLOY OMS BLUE WORLD ===
+  deploy-oms:
+    name: 🚀 Deploy OMS Blue World  
+    runs-on: ubuntu-latest
+    needs: [detect-changes, build-and-test, deploy-portal]
+    if: needs.detect-changes.outputs.oms-changed == 'true' || needs.detect-changes.outputs.should-deploy-all == 'true'
+    environment:
+      name: dev
+      url: https://oms-blueworld-dev.up.railway.app
+      
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        
+      - name: 🚀 Deploy to Railway
+        uses: railwayapp/railway-deploy@v3
+        with:
+          service: 'oms-blueworld'
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          
+      - name: ✅ Health Check
+        run: |
+          sleep 30
+          curl -f https://oms-blueworld-dev.up.railway.app/api/health || exit 1
+
+  # === DEPLOY TRADIA ===
+  deploy-tradia:
+    name: 🚀 Deploy Tradia
+    runs-on: ubuntu-latest
+    needs: [detect-changes, build-and-test, deploy-portal]
+    if: needs.detect-changes.outputs.tradia-changed == 'true' || needs.detect-changes.outputs.should-deploy-all == 'true'
+    environment:
+      name: dev  
+      url: https://tradia-dev.up.railway.app
+      
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        
+      - name: 🚀 Deploy to Railway
+        uses: railwayapp/railway-deploy@v3
+        with:
+          service: 'tradia'
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          
+      - name: ✅ Health Check
+        run: |
+          sleep 30
+          curl -f https://tradia-dev.up.railway.app/api/health || exit 1
+
+  # === INTEGRATION TESTS ===
+  integration-tests:
+    name: 🧪 Integration Tests
+    runs-on: ubuntu-latest
+    needs: [deploy-portal, deploy-oms]
+    if: always() && (needs.deploy-portal.result == 'success' || needs.deploy-oms.result == 'success')
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        
+      - name: 🧪 Test SSO Flow
+        run: |
+          # Testar login no Portal
+          response=$(curl -s -X POST https://portal-toit-dev.up.railway.app/api/auth/login \
+            -H "Content-Type: application/json" \
+            -H "X-Tenant-Slug: blueworld" \
+            -d '{"cpf":"12345678900","password":"123456"}')
+          
+          echo "Login response: $response"
+          
+          # Extrair token
+          token=$(echo $response | jq -r '.data.token')
+          
+          if [ "$token" != "null" ]; then
+            echo "✅ SSO Login funcionando"
+            
+            # Testar acesso ao OMS com token
+            oms_response=$(curl -s https://oms-blueworld-dev.up.railway.app/api/health \
+              -H "Authorization: Bearer $token")
+            echo "✅ OMS SSO funcionando: $oms_response"
+          else
+            echo "❌ SSO Login falhou"
+            exit 1
+          fi
+          
+  # === POST-DEPLOY NOTIFICATIONS ===
+  notify:
+    name: 📢 Notify Deploy Status
+    runs-on: ubuntu-latest
+    needs: [deploy-portal, deploy-oms, deploy-tradia, integration-tests]
+    if: always()
+    
+    steps:
+      - name: 📢 Success Notification
+        if: ${{ needs.deploy-portal.result == 'success' || needs.deploy-oms.result == 'success' || needs.deploy-tradia.result == 'success' }}
+        run: |
+          echo "🎉 Deploy realizado com sucesso!"
+          echo "Portal: https://portal-toit-dev.up.railway.app"
+          echo "OMS: https://oms-blueworld-dev.up.railway.app"
+          echo "Tradia: https://tradia-dev.up.railway.app"
+          
+      - name: 📢 Failure Notification
+        if: ${{ failure() }}
+        run: |
+          echo "❌ Deploy falhou! Verifique os logs."
+          
+  # === CLEANUP ===
+  cleanup:
+    name: 🧹 Cleanup
+    runs-on: ubuntu-latest
+    needs: [notify]
+    if: always()
+    
+    steps:
+      - name: 🧹 Clear Build Cache
+        run: echo "Limpando cache de build..."
