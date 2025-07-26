@@ -1,0 +1,461 @@
+<html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAD.IA - Logo Showcase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght:400;700;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f9fafb;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .showcase-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #1f2937;
+        }
+
+        /* Logo Principal */
+        .logo-main {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .diamond {
+            font-size: 20px;
+            line-height: 0.6;
+            text-align: center;
+            background: linear-gradient(135deg, #7C3AED 0%, #10B981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 3s ease-in-out infinite;
+            user-select: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            50% { 
+                transform: scale(1.05);
+                filter: brightness(1.2);
+            }
+        }
+
+        .logo-text h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 3rem;
+            color: #1f2937;
+            margin: 0;
+            letter-spacing: -1px;
+        }
+
+        .logo-text .ia {
+            font-style: italic;
+            background: linear-gradient(90deg, #7C3AED 0%, #10B981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-left: -2px;
+        }
+
+        .logo-text .tagline {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            color: #6b7280;
+            margin-top: -5px;
+            text-transform: uppercase;
+        }
+
+        /* Variações */
+        .variations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .variation {
+            padding: 2rem;
+            background: #f9fafb;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        /* Logo Horizontal */
+        .logo-horizontal {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .logo-horizontal .diamond {
+            font-size: 16px;
+        }
+
+        .logo-horizontal .text {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+        }
+
+        .logo-horizontal h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: #1f2937;
+        }
+
+        .logo-horizontal .tagline {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        /* Logo Vertical */
+        .logo-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-vertical .diamond {
+            font-size: 14px;
+        }
+
+        .logo-vertical h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.25rem;
+            color: #1f2937;
+        }
+
+        /* Logo Icon Only */
+        .logo-icon {
+            font-size: 48px;
+            background: linear-gradient(135deg, #7C3AED 0%, #10B981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Aplicações */
+        .applications {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .app-card {
+            background: linear-gradient(135deg, #7C3AED 0%, #10B981 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .app-card .diamond {
+            font-size: 24px;
+            color: white;
+            -webkit-text-fill-color: white;
+            margin-bottom: 1rem;
+        }
+
+        .app-card h4 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .app-card p {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        /* Colors */
+        .color-palette {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .color {
+            width: 120px;
+            height: 120px;
+            border-radius: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .color.roxo { background: #7C3AED; }
+        .color.verde { background: #10B981; }
+        .color.dourado { background: #F59E0B; }
+        .color.cinza { background: #DC2626; }
+        .color.gradient { 
+            background: linear-gradient(135deg, #7C3AED 0%, #10B981 100%); 
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo-main {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo-text h1 {
+                font-size: 2rem;
+            }
+
+            .variations {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Diamond Construction */
+        .diamond-build {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: monospace;
+            font-size: 24px;
+            line-height: 0.7;
+        }
+
+        /* Badge Examples */
+        .badges {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge.warning {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge.premium {
+            background: linear-gradient(135deg, #7C3AED 0%, #10B981 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo Principal -->
+    <div class="showcase-section">
+        <h2>Logo Principal</h2>
+        <div class="logo-main">
+            <div class="diamond">
+                <div>◆</div>
+                <div>◆◆◆</div>
+                <div>◆◆◆◆◆</div>
+                <div>◆◆◆◆◆◆◆</div>
+                <div>◆◆◆◆◆</div>
+                <div>◆◆◆</div>
+                <div>◆</div>
+            </div>
+            <div class="logo-text">
+                <h1>TRAD<span class="ia">.IA</span></h1>
+                <p class="tagline">Lucre Dormindo</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variações -->
+    <div class="showcase-section">
+        <h2>Variações do Logo</h2>
+        <div class="variations">
+            <div class="variation">
+                <h4>Horizontal Compacto</h4>
+                <div class="logo-horizontal">
+                    <div class="diamond">◆</div>
+                    <div class="text">
+                        <h3>TRAD<span class="ia">.IA</span></h3>
+                        <span class="tagline">Lucre Dormindo</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="variation">
+                <h4>Vertical</h4>
+                <div class="logo-vertical">
+                    <div class="diamond">
+                        <div>◆</div>
+                        <div>◆◆◆</div>
+                        <div>◆◆◆◆◆</div>
+                        <div>◆◆◆</div>
+                        <div>◆</div>
+                    </div>
+                    <h3>TRAD<span class="ia">.IA</span></h3>
+                    <span class="tagline" style="font-size: 0.75rem; color: #6b7280;">LUCRE DORMINDO</span>
+                </div>
+            </div>
+            
+            <div class="variation">
+                <h4>Ícone</h4>
+                <div class="logo-icon">◆</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Paleta de Cores -->
+    <div class="showcase-section">
+        <h2>Paleta de Cores</h2>
+        <div class="color-palette">
+            <div class="color roxo">
+                <span>Roxo Premium</span>
+                <small>#7C3AED</small>
+            </div>
+            <div class="color verde">
+                <span>Verde Lucro</span>
+                <small>#10B981</small>
+            </div>
+            <div class="color dourado">
+                <span>Dourado</span>
+                <small>#F59E0B</small>
+            </div>
+            <div class="color cinza">
+                <span>Cinza Strike</span>
+                <small>#DC2626</small>
+            </div>
+            <div class="color gradient">
+                <span>Gradiente</span>
+                <small>Principal</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aplicações -->
+    <div class="showcase-section">
+        <h2>Aplicações</h2>
+        <div class="applications">
+            <div class="app-card">
+                <div class="diamond">◆</div>
+                <h4>Swing Trade</h4>
+                <p>+43% ao ano</p>
+            </div>
+            <div class="app-card" style="background: linear-gradient(135deg, #7C3AED 0%, #F59E0B 100%);">
+                <div class="diamond">◆</div>
+                <h4>Long Shot</h4>
+                <p>85% de acerto</p>
+            </div>
+            <div class="app-card" style="background: linear-gradient(135deg, #10B981 0%, #34D399 100%);">
+                <div class="diamond">◆</div>
+                <h4>Smart Suite</h4>
+                <p>O pacote inteligente</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Badges -->
+    <div class="showcase-section">
+        <h2>Badges e Selos</h2>
+        <div class="badges">
+            <div class="badge success">
+                <span>✅</span>
+                <span>85% Win Rate Verified</span>
+            </div>
+            <div class="badge warning">
+                <span>🚫</span>
+                <span>Day Trade Free Zone</span>
+            </div>
+            <div class="badge premium">
+                <span>😴</span>
+                <span>Sleep Approved Trading</span>
+            </div>
+            <div class="badge success">
+                <span>💎</span>
+                <span>TRAD.IA Premium</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slogan Variations -->
+    <div class="showcase-section">
+        <h2>Variações de Slogan</h2>
+        <div style="text-align: center; line-height: 2;">
+            <p style="font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, #7C3AED 0%, #10B981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                LUCRE DORMINDO
+            </p>
+            <p style="font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-top: 1rem;">
+                Day Trade Não. Lucro Sim.
+            </p>
+            <p style="font-size: 1.25rem; font-weight: 600; color: #6b7280; margin-top: 1rem;">
+                Trading Inteligente para Pessoas Inteligentes
+            </p>
+            <p style="font-size: 1.125rem; font-weight: 500; color: #9ca3af; margin-top: 1rem;">
+                Acerte Mais. Estresse Menos.
+            </p>
+        </div>
+    </div>
+
+</body></html>

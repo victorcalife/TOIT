@@ -1,0 +1,50 @@
+{
+  "name": "mosaic-react",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@radix-ui/react-popover": "^1.1.2",
+    "@tailwindcss/forms": "^0.5.7",
+    "chart.js": "^4.4.1",
+    "chartjs-adapter-moment": "^1.0.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.525.0",
+    "moment": "^2.29.4",
+    "react": "^19.0.0",
+    "react-day-picker": "^9.4.1",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
+    "react-input-mask": "^2.0.4",
+    "react-router-dom": "^7.6.3",
+    "react-transition-group": "^4.4.5",
+    "recharts": "^3.0.2",
+    "tailwind-merge": "^2.5.5",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^4.0.0",
+    "vite": "^6.0.3"
+  },
+  "description": "![Mosaic Tailwind admin template preview](https://github.com/cruip/tailwind-dashboard-template/assets/2683512/ef306423-3b89-4d0c-be80-9c5c682478d1)",
+  "main": "vite.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cruip/tailwind-dashboard-template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cruip/tailwind-dashboard-template/issues"
+  },
+  "homepage": "https://github.com/cruip/tailwind-dashboard-template#readme"
+}

@@ -1,0 +1,284 @@
+version: '3.8'
+
+services:
+  # ================================
+  # DATABASES
+  # ================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: tradia_postgres
+    environment:
+      POSTGRES_DB: tradia_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./backend/database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+    networks:
+      - tradia_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: tradia_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - tradia_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+
+  # ================================
+  # BACKEND API
+  # ================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    container_name: tradia_backend
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/tradia_dev
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: dev-secret-key-change-in-production
+      CORS_ORIGIN: http://localhost:3000
+      API_VERSION: v1
+      LOG_LEVEL: debug
+      RATE_LIMIT_WINDOW_MS: 900000
+      RATE_LIMIT_MAX_REQUESTS: 1000
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/package.json:/app/package.json
+      - ./backend/tsconfig.json:/app/tsconfig.json
+      - backend_node_modules:/app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tradia_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ================================
+  # FRONTEND
+  # ================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    container_name: tradia_frontend
+    environment:
+      NODE_ENV: development
+      REACT_APP_API_URL: http://localhost:3001/api
+      REACT_APP_WS_URL: ws://localhost:3001
+      REACT_APP_VERSION: 1.0.0
+      REACT_APP_ENVIRONMENT: development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/package.json:/app/package.json
+      - ./frontend/tsconfig.json:/app/tsconfig.json
+      - frontend_node_modules:/app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - tradia_network
+    restart: unless-stopped
+
+  # ================================
+  # AI ENGINE
+  # ================================
+  ai-engine:
+    build:
+      context: ./backend/ai-engine
+      dockerfile: Dockerfile
+    container_name: tradia_ai
+    environment:
+      PYTHONPATH: /app
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/tradia_dev
+      REDIS_URL: redis://redis:6379
+      API_BASE_URL: http://backend:3001/api
+      LOG_LEVEL: INFO
+      YAHOO_FINANCE_TIMEOUT: 30
+      BACKTEST_MAX_DAYS: 365
+    volumes:
+      - ./backend/ai-engine:/app
+      - ai_data:/app/data
+      - ai_models:/app/models
+      - ai_logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tradia_network
+    restart: unless-stopped
+
+  # ================================
+  # MONITORING & TOOLS
+  # ================================
+  # Redis Admin
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: tradia_redis_admin
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - tradia_network
+    profiles: ["tools"]
+
+  # PostgreSQL Admin
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: tradia_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@tradia.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8082:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - tradia_network
+    profiles: ["tools"]
+
+  # Nginx Reverse Proxy (Production-like)
+  nginx:
+    image: nginx:alpine
+    container_name: tradia_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - tradia_network
+    profiles: ["production"]
+
+  # ================================
+  # BACKGROUND SERVICES
+  # ================================
+  # Worker para processamento de sinais
+  signal-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    container_name: tradia_signal_worker
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/tradia_dev
+      REDIS_URL: redis://redis:6379
+      WORKER_TYPE: signals
+      WORKER_CONCURRENCY: 5
+    volumes:
+      - ./backend/src:/app/src
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tradia_network
+    command: npm run worker:signals
+    restart: unless-stopped
+    profiles: ["workers"]
+
+  # Worker para notificações
+  notification-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    container_name: tradia_notification_worker
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/tradia_dev
+      REDIS_URL: redis://redis:6379
+      WORKER_TYPE: notifications
+      WORKER_CONCURRENCY: 10
+      WHATSAPP_API_KEY: ${WHATSAPP_API_KEY}
+      EMAIL_API_KEY: ${EMAIL_API_KEY}
+    volumes:
+      - ./backend/src:/app/src
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tradia_network
+    command: npm run worker:notifications
+    restart: unless-stopped
+    profiles: ["workers"]
+
+# ================================
+# VOLUMES
+# ================================
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+  backend_node_modules:
+    driver: local
+  frontend_node_modules:
+    driver: local
+  ai_data:
+    driver: local
+  ai_models:
+    driver: local
+  ai_logs:
+    driver: local
+
+# ================================
+# NETWORKS
+# ================================
+networks:
+  tradia_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

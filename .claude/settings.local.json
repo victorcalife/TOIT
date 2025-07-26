@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(true)",
+      "Bash(cp:*)",
+      "Bash(ls:*)",
+      "Bash(rm:*)",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "Bash(touch:*)",
+      "Bash(code --version)",
+      "Bash(chmod:*)",
+      "Bash(bash scripts/connect-existing-railway.sh:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(railway whoami:*)",
+      "Bash(railway status:*)",
+      "Bash(railway projects:*)",
+      "Bash(railway:*)",
+      "Bash(timeout 30 railway logs --build)",
+      "Bash(git checkout:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(dir:*)",
+      "Bash(copy:*)",
+      "Bash(curl:*)",
+      "Bash(timeout:*)",
+      "Bash(robocopy:*)",
+      "Bash(node:*)",
+      "Bash(ping:*)"
+    ],
+    "deny": []
+  }
+}
