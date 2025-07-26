@@ -144,14 +144,14 @@ if [ -d "frontend" ]; then
 fi
 
 # AI Engine dependencies (Python)
-if [ -d "ai-engine" ] && command_exists python3; then
-    cd ai-engine
+if [ -d "backend/ai-engine" ] && command_exists python3; then
+    cd backend/ai-engine
     if [ -f "requirements.txt" ]; then
         python3 -m pip install -r requirements.txt
         log_success "AI Engine dependencies installed"
     fi
-    cd ..
-elif [ -d "ai-engine" ]; then
+    cd ../..
+elif [ -d "backend/ai-engine" ]; then
     log_warning "Python3 not found. Skipping AI Engine dependencies."
 fi
 

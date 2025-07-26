@@ -16,8 +16,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
-      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+      - ./backend/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./backend/database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
     networks:
       - tradia_network
     healthcheck:
@@ -117,7 +117,7 @@ services:
   # ================================
   ai-engine:
     build:
-      context: ./ai-engine
+      context: ./backend/ai-engine
       dockerfile: Dockerfile
     container_name: tradia_ai
     environment:
@@ -130,7 +130,7 @@ services:
       YAHOO_FINANCE_TIMEOUT: 30
       BACKTEST_MAX_DAYS: 365
     volumes:
-      - ./ai-engine:/app
+      - ./backend/ai-engine:/app
       - ai_data:/app/data
       - ai_models:/app/models
       - ai_logs:/app/logs

@@ -1,12 +1,6 @@
 # 🎯 TRADia Platform - Guia Completo de Setup
 
-## � **Status do Projeto**
-- ✅ **Configuração Inicial:** Completa
-- 🔄 **Em Configuração:** Railway CI/CD Pipeline  
-- ⏳ **Pendente:** Deploy para produção
-- 📅 **Última Atualização:** 23/07/2025
-
-## �📋 **O que foi criado para você:**
+## 📋 **O que foi criado para você:**
 
 ### ✅ **Estrutura Completa do Projeto**
 - 📁 **TRADia/** como diretório principal
@@ -57,24 +51,6 @@ git checkout dev  # Voltar para dev para desenvolvimento
 ### **2. Configurar Railway (Dentro do Projeto TOIT Existente)**
 
 #### **🎯 OPÇÃO A: Usar Projeto TOIT Existente (RECOMENDADO)**
-
-**📋 O que você vai ter:**
-- **GitHub:** 1 repositório → `victorcalife/TRADia`
-- **Railway:** 3 serviços TRADia DENTRO do projeto TOIT existente
-- **Banco/Cache:** Reutiliza os que já existem
-
-**🏗️ Estrutura Final Railway:**
-```
-Projeto TOIT (já existe)
-├── postgres (já existe)
-├── redis (já existe) 
-├── portal-dev (já existe)
-├── portal-test (já existe)
-├── portal-prod (já existe)
-├── tradia-dev ← NOVO
-├── tradia-test ← NOVO
-└── tradia-prod ← NOVO
-```
 
 Se você já tem um projeto TOIT no Railway com PostgreSQL e Redis:
 
@@ -173,15 +149,7 @@ RAILWAY_TOKEN_PROD=token-do-railway-prod
 SLACK_WEBHOOK_URL=seu-webhook-slack (opcional)
 ```
 
-### **5. Desenvolvimento (Opcional - Ambiente Local)**
-
-> **💡 NOTA:** Desenvolvimento local é **opcional**. 
-> Você pode desenvolver diretamente nos ambientes Railway:
-> - `dev` → Desenvolvimento e testes
-> - `test` → Validação final
-> - `prod` → Produção
-
-**Se quiser ambiente local:** 
+### **5. Desenvolvimento Local** 
 
 ```bash
 # Copiar configuração de ambiente

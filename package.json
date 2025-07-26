@@ -12,17 +12,14 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "clean": "turbo run clean",
-    
     "institucional:dev": "turbo run dev --filter=institucional",
     "itms:dev": "turbo run dev --filter=itms",
     "portal:dev": "turbo run dev --filter=portal-toit",
     "oms:dev": "turbo run dev --filter=oms-blueworld",
     "tradia:dev": "turbo run dev --filter=tradia",
     "easis:dev": "turbo run dev --filter=easis-erp",
-    
     "sistemas:dev": "turbo run dev --filter=./SISTEMAS/*",
     "services:dev": "turbo run dev --filter=./SERVICES/*",
-    
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\""
   },
@@ -54,6 +51,10 @@
   "author": "TOIT - The One in Tech",
   "license": "PROPRIETARY",
   "dependencies": {
-    "express": "^5.1.0"
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "express": "^5.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   }
 }

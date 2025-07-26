@@ -7,8 +7,15 @@ import dotenv from 'dotenv';
 import { createServer } from 'http';
 import WebSocket from 'ws';
 
-// ...existing code...
+import tradingRoutes from './routes/trading';
+import portfolioRoutes from './routes/portfolio';
+import marketDataRoutes from './routes/marketData';
+import backtestingRoutes from './routes/backtesting';
+import { errorHandler } from './middleware/errorHandler';
+import { notFound } from './middleware/notFound';
 import { initDatabase } from './config/database';
+import { MarketDataService } from './services/marketData';
+import { TradingEngine } from './services/tradingEngine';
 
 dotenv.config();
 
@@ -59,12 +66,49 @@ app.get('/health', (req, res) => {
 });
 
 // API Routes
-// ...existing code...
+app.use('/api/trading', tradingRoutes);
+app.use('/api/portfolio', portfolioRoutes);
+app.use('/api/market', marketDataRoutes);
+app.use('/api/backtest', backtestingRoutes);
 
-// ...existing code...
+// WebSocket connections for real-time trading data
+wss.on('connection', (ws) => {
+  console.log('🔗 New WebSocket connection');
+  
+  ws.on('message', (message) => {
+    try {
+      const data = JSON.parse(message.toString());
+      
+      switch (data.type) {
+        case 'subscribe_prices':
+          // Subscribe to real-time price updates
+          MarketDataService.subscribeToSymbol(data.symbol, (priceData) => {
+            ws.send(JSON.stringify({
+              type: 'price_update',
+              symbol: data.symbol,
+              data: priceData
+            }));
+          });
+          break;
+          
+        case 'subscribe_portfolio':
+          // Subscribe to portfolio updates
+          // Implementation depends on user authentication
+          break;
+      }
+    } catch (error) {
+      console.error('❌ WebSocket message error:', error);
+    }
+  });
+  
+  ws.on('close', () => {
+    console.log('❌ WebSocket connection closed');
+  });
+});
 
 // Error handling
-// ...existing code...
+app.use(notFound);
+app.use(errorHandler);
 
 // Start server
 server.listen(PORT, async () => {
@@ -81,7 +125,21 @@ server.listen(PORT, async () => {
     console.error('❌ Trad.ia Database initialization failed:', error);
   }
   
-  // ...existing code...
+  // Initialize market data service
+  try {
+    await MarketDataService.initialize();
+    console.log('✅ Market Data Service initialized');
+  } catch (error) {
+    console.error('❌ Market Data Service initialization failed:', error);
+  }
+  
+  // Initialize trading engine
+  try {
+    TradingEngine.initialize();
+    console.log('✅ Trading Engine initialized');
+  } catch (error) {
+    console.error('❌ Trading Engine initialization failed:', error);
+  }
 });
 
 export default app;

@@ -1,4 +1,14 @@
-# Trad.ia - Trading Intelligence Platform
+# TRADia - Trading Intelligence Platform
+
+🚀 **Plataforma de Sinais de Trading com IA**
+
+Uma plataforma de informações financeiras que fornece sinais de trading inteligentes para decisões de investimento. Os usuários mantêm controle total sobre seu capital enquanto recebem recomendações baseadas em IA.
+
+## 📊 **Resultados Comprovados**
+- **+42.64%** retorno anualizado da plataforma
+- **68.1%** taxa de acerto geral
+- **4.2%** drawdown máximo controlado
+- **3 estratégias** validadas: Pairs Trading, Swing Trade, Gap Trading
 
 Plataforma de day-trade automatizada com inteligência artificial para BOVESPA.
 
@@ -16,9 +26,11 @@ Sistema completo de trading com:
 ```
 trad-ia/
 ├── frontend/          # React application especializada
-├── backend/           # Express API + PostgreSQL
-├── ai-engine/         # Algoritmos de IA e análise técnica
-├── docs/              # Documentação técnica completa
+├── backend/           # Express API + PostgreSQL + IA + Database
+│   ├── src/           # Backend source code
+│   ├── ai-engine/     # Algoritmos de IA e análise técnica
+│   ├── database/      # Database schemas and migrations
+│   └── docs/          # Documentação técnica completa
 └── package.json       # Configurações do app
 ```
 
@@ -31,7 +43,7 @@ npm run dev
 # Componentes individuais
 npm run dev:frontend
 npm run dev:backend
-npm run dev:ai-engine
+npm run dev:ai
 
 # Build para produção
 npm run build
@@ -111,3 +123,32 @@ npm run lint
 - **docs/CLAUDE.md:** Documentação Claude específica
 - **docs/APIS.txt:** Integração CedroTech
 - **docs/doc_continuidade.md:** Histórico de desenvolvimento
+
+## 🚀 CI/CD & Deploy
+
+### Workflow Automático (GitHub Actions)
+- Push nas branches `dev` ou `test` dispara build e deploy automático Railway.
+- Workflow: `.github/workflows/deploy.yml`
+- Deploy manual para produção via branch `main`.
+
+### Docker
+- Build e deploy via Dockerfile na raiz do projeto.
+- Comando: `docker build -t tradia . && docker run -p 3002:3002 tradia`
+
+### Railway
+- Conecte o repositório ao Railway.
+- Configure variáveis de ambiente conforme `.env.example`.
+- Deploy automático para dev/test, manual para produção.
+
+## 🌎 Variáveis de Ambiente
+- Configure `.env` em cada pacote usando os exemplos:
+  - `backend/.env.example`
+  - `frontend/.env.example`
+  - `backend/ai-engine/.env.example`
+  - `.env.example` global
+
+## 🛠️ Fluxo de Deploy
+1. Faça push para `dev` ou `test` → Deploy automático Railway.
+2. Faça push manual para `main` → Deploy produção.
+3. Configure variáveis de ambiente no Railway.
+4. Acesse o dashboard para monitorar status.

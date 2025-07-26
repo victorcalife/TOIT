@@ -1,1 +1,0 @@
-// Arquivo inutilizado, não utilizar mais no projeto.
